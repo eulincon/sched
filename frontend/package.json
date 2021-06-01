@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@ant-design/icons": "^4.6.2",
     "antd": "^4.15.5",
     "next": "10.2.0",
     "react": "17.0.2",
@@ -16,6 +17,7 @@
   },
   "devDependencies": {
     "@types/react": "^17.0.4",
+    "babel-plugin-styled-components": "^1.12.0",
     "typescript": "^4.2.4"
   }
 }
