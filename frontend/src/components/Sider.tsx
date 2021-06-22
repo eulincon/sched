@@ -1,9 +1,10 @@
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
 import { Layout, Menu } from 'antd'
 import 'antd/dist/antd.css'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { navItemAdm } from '../../utils/navBarAdm'
+import { navItemAdm } from '../utils/navBarAdm'
+import ListSecretarias from './ListSecretarias'
 
 const { Header, Sider, Content } = Layout
 
@@ -35,28 +36,43 @@ const StyledLayout = styled(Layout)`
 
 const SiderDemo = () => {
   const [collapsed, setCollapsed] = useState(false)
+  const [showChild, setShowChild] = useState(false)
+  const [activeMenu, setActiveMenu] = useState('0')
+
+  // Wait until after client-side hydration to show
+  useEffect(() => {
+    setShowChild(true)
+  }, [])
+
+  if (!showChild) {
+    // You can show some kind of placeholder UI here
+    return null
+  }
 
   const toggle = () => {
     setCollapsed(!collapsed)
   }
+
+  const changeMenu = active => {
+    setActiveMenu(active)
+  }
+
   return (
     <StyledLayout>
       <Sider trigger={null} collapsible collapsed={collapsed}>
         <div className="logo" />
-        <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
+        <Menu theme="dark" mode="inline" defaultSelectedKeys={['0']}>
           {navItemAdm.map((index, key) => {
             return (
-              <Menu.Item key={key} icon={index.icon}>
+              <Menu.Item
+                key={key}
+                icon={index.icon}
+                onClick={() => changeMenu(key)}
+              >
                 {index.title}
               </Menu.Item>
             )
           })}
-          {/* <Menu.Item key="2" icon={<VideoCameraOutlined />}>
-            nav 2
-          </Menu.Item>
-          <Menu.Item key="3" icon={<UploadOutlined />}>
-            nav 3
-          </Menu.Item> */}
         </Menu>
       </Sider>
       <Layout className="site-layout">
@@ -77,7 +93,7 @@ const SiderDemo = () => {
             minHeight: 280,
           }}
         >
-          Content
+          {activeMenu == '1' ? <ListSecretarias /> : null}
         </Content>
       </Layout>
     </StyledLayout>
