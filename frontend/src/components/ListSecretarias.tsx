@@ -1,23 +1,18 @@
-// const ListSecretarias = () => {
-
-// }
-
-// export default ListSecretarias
-
-import { Button, Row, Space, Table, Tag } from 'antd'
+import { Row, Space, Table, Tag } from 'antd'
 import React from 'react'
+import FormSecretaria from './FormSecretaria'
 
 const columns = [
   {
     title: 'Nome',
     dataIndex: 'name',
     key: 'name',
-    render: text => <a>{text}</a>,
+    render: (text) => <a>{text}</a>,
   },
   {
     title: 'CPF',
-    dataIndex: 'age',
-    key: 'age',
+    dataIndex: 'cpf',
+    key: 'cpf',
   },
   {
     title: 'Endereço',
@@ -28,9 +23,9 @@ const columns = [
     title: 'Tags',
     key: 'tags',
     dataIndex: 'tags',
-    render: tags => (
+    render: (tags) => (
       <span>
-        {tags.map(tag => {
+        {tags.map((tag) => {
           let color = tag.length > 5 ? 'geekblue' : 'green'
           if (tag === 'loser') {
             color = 'volcano'
@@ -49,7 +44,7 @@ const columns = [
     key: 'action',
     render: (text, record) => (
       <Space size="middle">
-        <a>Invite {record.name}</a>
+        <a>Editar</a>
         <a>Deletar</a>
       </Space>
     ),
@@ -59,23 +54,23 @@ const columns = [
 const data = [
   {
     key: '1',
-    name: 'John Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park',
+    name: 'Ana da Silva',
+    cpf: '111-111-111-11',
+    address: 'Rua Fom José',
     tags: ['nice', 'developer'],
   },
   {
     key: '2',
-    name: 'Jim Green',
-    age: 42,
-    address: 'London No. 1 Lake Park',
-    tags: ['loser'],
+    name: 'Elena',
+    cpf: '111-111-111-11',
+    address: 'Rua Amélia Sousa',
+    tags: ['master'],
   },
   {
     key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sidney No. 1 Lake Park',
+    name: 'Lucia',
+    cpf: '111-111-111-11',
+    address: 'Rua Jose de Alencar',
     tags: ['cool', 'teacher'],
   },
 ]
@@ -91,9 +86,7 @@ class ListSecretarias extends React.Component {
           dataSource={data}
         />
         <Row style={{ marginTop: '2vh' }}>
-          <Button type="primary" style={{ marginLeft: 'auto' }} size={'large'}>
-            Adicionar secretária
-          </Button>
+          <FormSecretaria />
         </Row>
       </div>
     )
