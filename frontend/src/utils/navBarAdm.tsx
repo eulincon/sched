@@ -16,7 +16,7 @@ export const navItemAdm = [
     icon: <UserOutlined />,
   },
   {
-    title: 'sfdfsfdsfddsf',
+    title: 'Consultórios',
     path: '/',
     icon: <InsertRowRightOutlined />,
   },
