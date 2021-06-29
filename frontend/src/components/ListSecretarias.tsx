@@ -1,5 +1,6 @@
-import { Row, Space, Table, Tag } from 'antd'
+import { Popconfirm, Row, Space, Table, Tag } from 'antd'
 import React from 'react'
+import EditSecretariaModel from './EditSecretariaModal'
 import FormSecretaria from './FormSecretaria'
 
 const columns = [
@@ -44,32 +45,43 @@ const columns = [
     key: 'action',
     render: (text, record) => (
       <Space size="middle">
-        <a>Editar</a>
-        <a>Deletar</a>
+        <EditSecretariaModel secretaria={text} />
+        <Popconfirm
+          title="Tem certeza que deseja excluir？"
+          okText="Sim"
+          cancelText="Não"
+          onConfirm={confirmExclusion}
+        >
+          <a>Deletar</a>
+        </Popconfirm>
       </Space>
     ),
   },
 ]
 
+const confirmExclusion = () => {
+  console.log('Trying to delete...')
+}
+
 const data = [
   {
     key: '1',
     name: 'Ana da Silva',
-    cpf: '111-111-111-11',
+    cpf: '111.111.111-11',
     address: 'Rua Fom José',
     tags: ['nice', 'developer'],
   },
   {
     key: '2',
     name: 'Elena',
-    cpf: '111-111-111-11',
+    cpf: '111.111.111-11',
     address: 'Rua Amélia Sousa',
     tags: ['master'],
   },
   {
     key: '3',
     name: 'Lucia',
-    cpf: '111-111-111-11',
+    cpf: '111.111.111-11',
     address: 'Rua Jose de Alencar',
     tags: ['cool', 'teacher'],
   },
