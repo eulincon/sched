@@ -1,9 +1,8 @@
 import { Button, Col, Form, Input, Modal, Row } from 'antd'
-import MaskedInput from 'antd-mask-input'
 import React, { useState } from 'react'
-import SecretariaModel from '../utils/SecretariaModel'
+import ConsultorioModel from '../utils/ConsultoriosModel'
 
-const EditSecretariaModal = ({ secretaria }: SecretariaModel) => {
+const EditConsultorioModal = ({ consultorio }: ConsultorioModel) => {
   const [isModalVisible, setIsModalVisible] = useState(false)
 
   const showModal = () => {
@@ -29,10 +28,10 @@ const EditSecretariaModal = ({ secretaria }: SecretariaModel) => {
   return (
     <>
       <Button type="primary" onClick={showModal}>
-        Editar secretária
+        Editar consultório
       </Button>
       <Modal
-        title="Editar secretária"
+        title="Editar consultório"
         visible={isModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}
@@ -46,55 +45,41 @@ const EditSecretariaModal = ({ secretaria }: SecretariaModel) => {
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
-                initialValue={secretaria.name}
+                initialValue={consultorio.name}
                 name="name"
                 label="Nome"
                 rules={[
-                  { required: true, message: 'Por favor, digite o nome' },
-                ]}
-              >
-                <Input placeholder="Digite seu nome" />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item
-                initialValue={secretaria.cpf}
-                name="url"
-                label="CPF"
-                rules={[
                   {
                     required: true,
-                    message: 'Por favor, digite o CPF',
-                    pattern: /^\d{3}\.\d{3}\.\d{3}\-\d{2}$/,
+                    message: 'Por favor, digite o nome do consultório',
                   },
                 ]}
               >
-                <MaskedInput
-                  placeholder="Digite seu CPF"
-                  mask="111.111.111-11"
-                />
+                <Input placeholder="Digite o nome do consultório" />
               </Form.Item>
             </Col>
           </Row>
           <Row gutter={16}>
             <Col span={24}>
               <Form.Item
-                initialValue={secretaria.address}
+                initialValue={consultorio.address}
                 name="address"
                 label="Endereço"
                 rules={[
-                  { required: true, message: 'Por favor, digite o endereço' },
+                  {
+                    required: true,
+                    message: 'Por favor, digite o endereço do consultório',
+                  },
                 ]}
               >
-                <Input placeholder="Digite seu endereço" />
+                <Input placeholder="Digite o endereço do consultório" />
               </Form.Item>
             </Col>
           </Row>
         </Form>
-        {console.log(secretaria.cpf)}
       </Modal>
     </>
   )
 }
 
-export default EditSecretariaModal
+export default EditConsultorioModal

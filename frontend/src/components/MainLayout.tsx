@@ -4,6 +4,8 @@ import 'antd/dist/antd.css'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { navItemAdm } from '../utils/navBarAdm'
+import ConsultasAgendadas from './ConsultasAgendadas'
+import ListConsultorios from './ListConsultórios'
 import ListSecretarias from './ListSecretarias'
 
 const { Header, Sider, Content } = Layout
@@ -34,7 +36,7 @@ const StyledLayout = styled(Layout)`
   }
 `
 
-const SiderDemo = () => {
+const MainLayout = () => {
   const [collapsed, setCollapsed] = useState(false)
   const [showChild, setShowChild] = useState(false)
   const [activeMenu, setActiveMenu] = useState('0')
@@ -53,7 +55,7 @@ const SiderDemo = () => {
     setCollapsed(!collapsed)
   }
 
-  const changeMenu = active => {
+  const changeMenu = (active) => {
     setActiveMenu(active)
   }
 
@@ -93,11 +95,13 @@ const SiderDemo = () => {
             minHeight: 280,
           }}
         >
+          {activeMenu == '0' ? <ConsultasAgendadas /> : null}
           {activeMenu == '1' ? <ListSecretarias /> : null}
+          {activeMenu == '2' ? <ListConsultorios /> : null}
         </Content>
       </Layout>
     </StyledLayout>
   )
 }
 
-export default SiderDemo
+export default MainLayout

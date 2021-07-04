@@ -1,6 +1,6 @@
 import React from 'react'
-import SiderDemo from '../components/Sider'
+import MainLayout from '../components/MainLayout'
 
 export default function adm() {
-  return <SiderDemo />
+  return <MainLayout />
 }

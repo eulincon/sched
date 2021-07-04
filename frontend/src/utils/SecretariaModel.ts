@@ -1,4 +1,4 @@
-export type SecretariaModel = {
+type SecretariaModel = {
   secretaria: {
     id: number
     name: string
@@ -6,3 +6,5 @@ export type SecretariaModel = {
     address: string
   }
 }
+
+export default SecretariaModel
