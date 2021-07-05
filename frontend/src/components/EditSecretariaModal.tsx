@@ -91,7 +91,6 @@ const EditSecretariaModal = ({ secretaria }: SecretariaModel) => {
             </Col>
           </Row>
         </Form>
-        {console.log(secretaria.cpf)}
       </Modal>
     </>
   )

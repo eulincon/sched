@@ -1,5 +1,6 @@
 package br.com.lincon.sched.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.hibernate.validator.constraints.br.CPF;
 
@@ -21,5 +22,6 @@ public class Secretaria {
     private String cpf;
     private boolean isMain;
     @OneToOne
+    @JsonIgnore
     private Consultorio consultorio;
 }

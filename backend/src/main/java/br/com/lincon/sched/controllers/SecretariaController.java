@@ -14,6 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -46,6 +47,18 @@ public class SecretariaController {
         secretariaToUpdate.setNome(secretaria.getNome());
         secretariaToUpdate.setCpf(secretaria.getCpf());
         secretariaRepository.save(secretariaToUpdate);
+        return ResponseEntity.ok().build();
+    }
+
+    @Transactional
+    @PutMapping("{id}/updateMain")
+    public ResponseEntity updateMainSecretaria(@PathVariable Long id) {
+        Secretaria secretariaMainAnterior = secretariaRepository.findByIsMain(true);
+        secretariaMainAnterior.setMain(false);
+        Secretaria secretariaMainAtual = secretariaRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        secretariaMainAtual.setMain(true);
+        secretariaRepository.save(secretariaMainAnterior);
+        secretariaRepository.save(secretariaMainAtual);
         return ResponseEntity.ok().build();
     }
 }

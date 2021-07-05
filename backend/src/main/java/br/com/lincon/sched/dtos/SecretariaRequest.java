@@ -14,6 +14,6 @@ public class SecretariaRequest {
     private Long consultorioId;
 
     public Secretaria toDTO(Consultorio consultorio) {
-        return Secretaria.builder().cpf(this.cpf).nome(this.nome).isMain(this.isMain).consultorio(consultorio).build();
+        return Secretaria.builder().cpf(this.cpf).nome(this.nome).isMain(false).consultorio(consultorio).build();
     }
 }

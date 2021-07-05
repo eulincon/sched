@@ -1,5 +1,6 @@
 import { Popconfirm, Row, Space, Table, Tag } from 'antd'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import api from '../services/api'
 import EditSecretariaModel from './EditSecretariaModal'
 import FormSecretaria from './FormSecretaria'
 
@@ -87,22 +88,34 @@ const data = [
   },
 ]
 
-class ListSecretarias extends React.Component {
-  render() {
-    return (
-      <div>
-        <Table
-          columns={columns}
-          pagination={false}
-          bordered={true}
-          dataSource={data}
-        />
-        <Row style={{ marginTop: '2vh' }}>
-          <FormSecretaria />
-        </Row>
-      </div>
-    )
-  }
+type SecretariaProps = {
+  id: string
+  nome: string
+  cpf: string
+  main: string
+}
+
+const ListSecretarias = () => {
+  const [secretarias, setSecretarias] = useState<SecretariaProps[]>([])
+  useEffect(() => {
+    api.get(`secretarias`).then((response) => {
+      setSecretarias(response.data)
+    })
+  }, [])
+  return (
+    <div>
+      {console.log('UseEffect', secretarias)}
+      <Table
+        columns={columns}
+        pagination={false}
+        bordered={true}
+        dataSource={data}
+      />
+      <Row style={{ marginTop: '2vh' }}>
+        <FormSecretaria />
+      </Row>
+    </div>
+  )
 }
 
 export default ListSecretarias
