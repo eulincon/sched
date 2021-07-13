@@ -17,11 +17,13 @@ public class Secretaria {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotBlank
-    private String nome;
+    private String name;
     @CPF
     private String cpf;
     private boolean isMain;
+    @NotBlank
+    private String address;
     @OneToOne
     @JsonIgnore
-    private Consultorio consultorio;
+    private Consultorio clinic;
 }

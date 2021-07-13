@@ -7,13 +7,14 @@ import org.hibernate.validator.constraints.br.CPF;
 
 @Data
 public class SecretariaRequest {
-    private String nome;
+    private String name;
     @CPF
     private String cpf;
+    private String address;
     private boolean isMain;
     private Long consultorioId;
 
     public Secretaria toDTO(Consultorio consultorio) {
-        return Secretaria.builder().cpf(this.cpf).nome(this.nome).isMain(false).consultorio(consultorio).build();
+        return Secretaria.builder().cpf(this.cpf).name(this.name).address(this.address).isMain(false).clinic(consultorio).build();
     }
 }

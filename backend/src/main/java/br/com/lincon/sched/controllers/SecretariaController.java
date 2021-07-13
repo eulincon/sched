@@ -44,9 +44,16 @@ public class SecretariaController {
     @PutMapping("/{id}")
     public ResponseEntity updateSecretaria(@PathVariable Long id, @RequestBody SecretariaRequest secretaria) {
         Secretaria secretariaToUpdate = secretariaRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        secretariaToUpdate.setNome(secretaria.getNome());
+        secretariaToUpdate.setName(secretaria.getName());
         secretariaToUpdate.setCpf(secretaria.getCpf());
         secretariaRepository.save(secretariaToUpdate);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteSecretaria(@PathVariable Long id) {
+        Secretaria secretariaToDelete = secretariaRepository.findById(id).orElseThrow(() -> new NegocioException("Secretária não encontrada", HttpStatus.NOT_FOUND));
+        secretariaRepository.delete(secretariaToDelete);
         return ResponseEntity.ok().build();
     }
 
