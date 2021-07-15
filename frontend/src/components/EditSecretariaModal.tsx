@@ -1,25 +1,41 @@
-import { Button, Col, Form, Input, Modal, Row } from 'antd'
+import { Button, Col, Form, Input, message, Modal, Row } from 'antd'
 import MaskedInput from 'antd-mask-input'
 import React, { useState } from 'react'
+import api from '../services/api'
 import SecretariaModel from '../utils/SecretariaModel'
 
-const EditSecretariaModal = ({ secretaria }: SecretariaModel) => {
+type Function_ = {
+  getAllSecretarias: () => Promise<void>
+} & SecretariaModel
+
+const EditSecretariaModal = ({ secretaria, getAllSecretarias }: Function_) => {
   const [isModalVisible, setIsModalVisible] = useState(false)
+  const [secretariaState, setSecretariaState] = useState(secretaria)
 
   const showModal = () => {
     setIsModalVisible(true)
   }
 
-  const handleOk = () => {
+  const handleOk = (secretaria) => {
     setIsModalVisible(false)
+    onFinish(secretaria)
   }
 
   const handleCancel = () => {
     setIsModalVisible(false)
   }
 
-  const onFinish = (values: any) => {
-    console.log('Success:', values)
+  const onFinish = (secretaria) => {
+    api
+      .put(`/secretarias/${secretaria.id}`, secretaria)
+      .then(() => {
+        message.success('Alterações salvas com sucesso')
+        getAllSecretarias()
+      })
+      .catch((error) => {
+        message.error('Erro ao salvar alterações')
+        console.log('Erro: ', error)
+      })
   }
 
   const onFinishFailed = (errorInfo: any) => {
@@ -34,7 +50,7 @@ const EditSecretariaModal = ({ secretaria }: SecretariaModel) => {
       <Modal
         title="Editar secretária"
         visible={isModalVisible}
-        onOk={handleOk}
+        onOk={() => handleOk(secretariaState)}
         onCancel={handleCancel}
       >
         <Form
@@ -53,7 +69,15 @@ const EditSecretariaModal = ({ secretaria }: SecretariaModel) => {
                   { required: true, message: 'Por favor, digite o nome' },
                 ]}
               >
-                <Input placeholder="Digite seu nome" />
+                <Input
+                  onChange={(e) =>
+                    setSecretariaState({
+                      ...secretariaState,
+                      name: e.target.value,
+                    })
+                  }
+                  placeholder="Digite seu nome"
+                />
               </Form.Item>
             </Col>
             <Col span={12}>
@@ -72,6 +96,12 @@ const EditSecretariaModal = ({ secretaria }: SecretariaModel) => {
                 <MaskedInput
                   placeholder="Digite seu CPF"
                   mask="111.111.111-11"
+                  onChange={(e) =>
+                    setSecretariaState({
+                      ...secretariaState,
+                      cpf: e.target.value,
+                    })
+                  }
                 />
               </Form.Item>
             </Col>
@@ -86,7 +116,15 @@ const EditSecretariaModal = ({ secretaria }: SecretariaModel) => {
                   { required: true, message: 'Por favor, digite o endereço' },
                 ]}
               >
-                <Input placeholder="Digite seu endereço" />
+                <Input
+                  onChange={(e) =>
+                    setSecretariaState({
+                      ...secretariaState,
+                      address: e.target.value,
+                    })
+                  }
+                  placeholder="Digite seu endereço"
+                />
               </Form.Item>
             </Col>
           </Row>

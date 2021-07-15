@@ -47,7 +47,10 @@ const ListSecretarias = () => {
       key: 'action',
       render: (text, record) => (
         <Space size="middle">
-          <EditSecretariaModel secretaria={text} />
+          <EditSecretariaModel
+            secretaria={text}
+            getAllSecretarias={getAllSecretarias}
+          />
           <Popconfirm
             title="Tem certeza que deseja excluir？"
             okText="Sim"
@@ -65,7 +68,6 @@ const ListSecretarias = () => {
     api
       .delete(`/secretarias/${id}`)
       .then(() => {
-        console.log('Secretária removida com sucesso.')
         message.success('Secretária removida com sucesso.')
         const newSecretarias = secretarias.filter((obj) => obj.id != id)
         setSecretarias(newSecretarias)
@@ -108,8 +110,7 @@ const ListSecretarias = () => {
     address: string
   }
 
-  const [secretarias, setSecretarias] = useState<SecretariaProps[]>([])
-  useEffect(() => {
+  const getAllSecretarias = async () => {
     api
       .get(`secretarias`)
       .then((response) => {
@@ -124,6 +125,11 @@ const ListSecretarias = () => {
       .catch(() => {
         message.error('Erro ao carregar lista de secretárias.')
       })
+  }
+
+  const [secretarias, setSecretarias] = useState<SecretariaProps[]>([])
+  useEffect(() => {
+    getAllSecretarias()
   }, [])
   return (
     <div>

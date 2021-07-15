@@ -42,10 +42,12 @@ public class SecretariaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity updateSecretaria(@PathVariable Long id, @RequestBody SecretariaRequest secretaria) {
+    public ResponseEntity updateSecretaria(@PathVariable Long id, @RequestBody @Valid SecretariaRequest secretaria) {
         Secretaria secretariaToUpdate = secretariaRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         secretariaToUpdate.setName(secretaria.getName());
         secretariaToUpdate.setCpf(secretaria.getCpf());
+        secretariaToUpdate.setAddress(secretaria.getAddress());
+        secretariaToUpdate.setMain(secretaria.isMain());
         secretariaRepository.save(secretariaToUpdate);
         return ResponseEntity.ok().build();
     }
