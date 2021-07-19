@@ -35,7 +35,7 @@ public class SecretariaController {
 
     @PostMapping
     public ResponseEntity<Secretaria> criar(@RequestBody @Valid SecretariaRequest secretariaRequest){
-        Consultorio consultorio = consultorioRepository.findById(secretariaRequest.getConsultorioId()).orElseThrow(() -> new NegocioException("Consultorio com id {"+secretariaRequest.getConsultorioId()+"} não encontrado",HttpStatus.UNPROCESSABLE_ENTITY));
+        Consultorio consultorio = consultorioRepository.findById(secretariaRequest.getClinicId()).orElseThrow(() -> new NegocioException("Consultorio com id {"+secretariaRequest.getClinicId()+"} não encontrado",HttpStatus.UNPROCESSABLE_ENTITY));
         Secretaria secretaria = secretariaRequest.toDTO(consultorio);
         secretariaRepository.save(secretaria);
         return ResponseEntity.ok(secretaria);

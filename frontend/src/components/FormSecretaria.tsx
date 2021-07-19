@@ -1,11 +1,29 @@
 import { PlusOutlined } from '@ant-design/icons'
-import { Button, Col, Drawer, Form, Input, Row } from 'antd'
+import { Button, Col, Drawer, Form, Input, message, Row, Select } from 'antd'
 import MaskedInput from 'antd-mask-input'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import api from '../services/api'
+import ClinicModel from '../utils/ClinicModel'
 
-const FormSecretaria = () => {
+type FormSecretariaProps = {
+  getAllSecretarias: () => Promise<void>
+}
+
+const FormSecretaria = ({ getAllSecretarias }: FormSecretariaProps) => {
   const [state, setState] = useState({ visible: false })
+  const [clinics, setClinics] = useState<ClinicModel[]>([])
   const [form] = Form.useForm()
+
+  const { Option } = Select
+
+  const getClinics = async () => {
+    const { data } = await api.get('/consultorios')
+    setClinics(data)
+  }
+
+  useEffect(() => {
+    getClinics()
+  }, [])
 
   const showDrawer = () => {
     setState({
@@ -19,8 +37,20 @@ const FormSecretaria = () => {
     })
   }
 
-  const onFinish = (values: any) => {
+  const onFinish = (values: ClinicModel) => {
     console.log('Success:', values)
+    api
+      .post('/secretarias', values)
+      .then(() => {
+        console.log('Salvo com sucesso')
+        form.resetFields()
+        onClose()
+        getAllSecretarias()
+        message.success('Secretária cadastrada com sucesso')
+      })
+      .catch((error) => {
+        console.log(error)
+      })
   }
 
   const onFinishFailed = (errorInfo: any) => {
@@ -74,7 +104,7 @@ const FormSecretaria = () => {
             </Col>
             <Col span={12}>
               <Form.Item
-                name="url"
+                name="cpf"
                 label="CPF"
                 rules={[
                   {
@@ -101,6 +131,28 @@ const FormSecretaria = () => {
                 ]}
               >
                 <Input placeholder="Digite seu endereço" />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item
+                name="clinicId"
+                label="Consultorório"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Por favor, selecione um consultório',
+                  },
+                ]}
+              >
+                <Select placeholder="Selecione um consultório">
+                  {clinics.map((clinic) => (
+                    <Option key={clinic.id} value={clinic.id}>
+                      {clinic.name}
+                    </Option>
+                  ))}
+                </Select>
               </Form.Item>
             </Col>
           </Row>

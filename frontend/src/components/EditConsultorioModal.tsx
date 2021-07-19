@@ -1,8 +1,12 @@
 import { Button, Col, Form, Input, Modal, Row } from 'antd'
 import React, { useState } from 'react'
-import ConsultorioModel from '../utils/ConsultoriosModel'
+import ClinicModel from '../utils/ClinicModel'
 
-const EditConsultorioModal = ({ consultorio }: ConsultorioModel) => {
+type EditConsultorioProps = {
+  consultorio: ClinicModel
+}
+
+const EditConsultorioModal = ({ consultorio }: EditConsultorioProps) => {
   const [isModalVisible, setIsModalVisible] = useState(false)
 
   const showModal = () => {

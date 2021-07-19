@@ -19,8 +19,8 @@ public class Consultorio {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotBlank
-    private String nome;
+    private String name;
     @NotBlank
-    private String endereco;
+    private String address;
     private boolean isActive;
 }

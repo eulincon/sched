@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 @Data
 public class ConsultorioRequest {
     @NotBlank
-    private String nome;
+    private String name;
     @NotBlank
-    private String endereco;
+    private String address;
 }

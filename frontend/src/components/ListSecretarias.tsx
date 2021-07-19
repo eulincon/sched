@@ -140,7 +140,7 @@ const ListSecretarias = () => {
         dataSource={secretarias}
       />
       <Row style={{ marginTop: '2vh' }}>
-        <FormSecretaria />
+        <FormSecretaria getAllSecretarias={getAllSecretarias} />
       </Row>
     </div>
   )

@@ -12,7 +12,7 @@ public class SecretariaRequest {
     private String cpf;
     private String address;
     private boolean isMain;
-    private Long consultorioId;
+    private Long clinicId;
 
     public Secretaria toDTO(Consultorio consultorio) {
         return Secretaria.builder().cpf(this.cpf).name(this.name).address(this.address).isMain(false).clinic(consultorio).build();
