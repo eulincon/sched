@@ -6,9 +6,6 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { navItemAdm } from '../utils/navBarAdm'
-import ConsultasAgendadas from './ConsultasAgendadas'
-import ListConsultorios from './ListConsultórios'
-import ListSecretarias from './ListSecretarias'
 
 const { Header, Sider, Content } = Layout
 
@@ -38,7 +35,7 @@ const StyledLayout = styled(Layout)`
   }
 `
 
-const MainLayout = () => {
+const MainLayout2 = ({ children }) => {
   const [collapsed, setCollapsed] = useState(false)
   const [showChild, setShowChild] = useState(false)
   const [activeMenu, setActiveMenu] = useState('0')
@@ -47,7 +44,6 @@ const MainLayout = () => {
   // Wait until after client-side hydration to show
   useEffect(() => {
     setShowChild(true)
-    console.log('router', router)
   }, [])
 
   if (!showChild) {
@@ -63,7 +59,7 @@ const MainLayout = () => {
     <StyledLayout>
       <Sider trigger={null} collapsible collapsed={collapsed}>
         <div className="logo" />
-        <Menu theme="dark" mode="inline" defaultSelectedKeys={['0']}>
+        <Menu theme="dark" mode="inline" defaultSelectedKeys={['2']}>
           {navItemAdm.map((index, key) => {
             return (
               <Menu.Item
@@ -95,13 +91,11 @@ const MainLayout = () => {
             minHeight: 280,
           }}
         >
-          {activeMenu == '0' ? <ConsultasAgendadas /> : null}
-          {activeMenu == '1' ? <ListSecretarias /> : null}
-          {activeMenu == '2' ? <ListConsultorios /> : null}
+          {children}
         </Content>
       </Layout>
     </StyledLayout>
   )
 }
 
-export default MainLayout
+export default MainLayout2

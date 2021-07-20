@@ -7,17 +7,17 @@ import {
 export const navItemAdm = [
   {
     title: 'Calendário',
-    path: '/',
+    path: '#',
     icon: <CalendarOutlined />,
   },
   {
     title: 'Secretárias',
-    path: '/',
+    path: '#',
     icon: <UserOutlined />,
   },
   {
     title: 'Consultórios',
-    path: '/',
+    path: '/adm/consultorios',
     icon: <InsertRowRightOutlined />,
   },
 ]

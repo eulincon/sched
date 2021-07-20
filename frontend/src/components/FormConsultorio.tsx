@@ -1,10 +1,14 @@
 import { PlusOutlined } from '@ant-design/icons'
-import { Button, Col, Drawer, Form, Input, Row } from 'antd'
+import { Button, Col, Drawer, Form, Input, message, Row } from 'antd'
+import { useRouter } from 'next/router'
 import React, { useState } from 'react'
+import api from '../services/api'
+import ClinicModel from '../utils/ClinicModel'
 
 const FormConsultorio = () => {
   const [state, setState] = useState({ visible: false })
   const [form] = Form.useForm()
+  const router = useRouter()
 
   const showDrawer = () => {
     setState({
@@ -18,8 +22,22 @@ const FormConsultorio = () => {
     })
   }
 
-  const onFinish = (values: any) => {
-    console.log('Success:', values)
+  const onFinish = async (values: ClinicModel) => {
+    message.loading({ content: 'Criando consultório...', key: values })
+    await api
+      .post('/consultorios', values)
+      .then(() => {
+        onClose()
+        message.success({
+          content: 'Consoltório cadastrado com sucesso',
+          key: values,
+        })
+        form.resetFields()
+        router.replace(router.asPath)
+      })
+      .catch((error) => {
+        console.log('error ao cadastrar consultorio', error)
+      })
   }
 
   const onFinishFailed = (errorInfo: any) => {

@@ -39,6 +39,7 @@ const FormSecretaria = ({ getAllSecretarias }: FormSecretariaProps) => {
 
   const onFinish = (values: ClinicModel) => {
     console.log('Success:', values)
+    message.loading({ content: 'Cadastrando secretária', key: values.id })
     api
       .post('/secretarias', values)
       .then(() => {
@@ -46,10 +47,17 @@ const FormSecretaria = ({ getAllSecretarias }: FormSecretariaProps) => {
         form.resetFields()
         onClose()
         getAllSecretarias()
-        message.success('Secretária cadastrada com sucesso')
+        message.success({
+          content: 'Secretária cadastrada com sucesso',
+          key: values.id,
+        })
       })
       .catch((error) => {
         console.log(error)
+        message.error({
+          content: 'Erro ao cadastradar secretária',
+          key: values.id,
+        })
       })
   }
 

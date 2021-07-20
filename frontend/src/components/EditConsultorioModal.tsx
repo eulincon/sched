@@ -1,5 +1,8 @@
-import { Button, Col, Form, Input, Modal, Row } from 'antd'
+import { Button, Col, Form, Input, message, Modal, Row } from 'antd'
+import { useForm } from 'antd/lib/form/Form'
+import { useRouter } from 'next/router'
 import React, { useState } from 'react'
+import api from '../services/api'
 import ClinicModel from '../utils/ClinicModel'
 
 type EditConsultorioProps = {
@@ -7,22 +10,46 @@ type EditConsultorioProps = {
 }
 
 const EditConsultorioModal = ({ consultorio }: EditConsultorioProps) => {
+  const [clinic, setClinic] = useState(consultorio)
   const [isModalVisible, setIsModalVisible] = useState(false)
+  const router = useRouter()
+  const [form] = useForm()
 
   const showModal = () => {
     setIsModalVisible(true)
   }
 
   const handleOk = () => {
+    onFinish(clinic)
     setIsModalVisible(false)
   }
 
   const handleCancel = () => {
+    form.resetFields()
     setIsModalVisible(false)
   }
 
-  const onFinish = (values: any) => {
-    console.log('Success:', values)
+  const onFinish = (clinic) => {
+    console.log(clinic)
+    message.loading({
+      content: 'Autalizando consultório...',
+      key: clinic.id,
+    })
+    api
+      .put(`/consultorios/${clinic.id}`, clinic)
+      .then(() => {
+        message.success({
+          content: 'Consultório atualizado com sucesso',
+          key: clinic.id,
+        })
+        router.replace(router.asPath)
+      })
+      .catch(() => {
+        message.error({
+          content: 'Erro ao atualizar consultório',
+          key: clinic.id,
+        })
+      })
   }
 
   const onFinishFailed = (errorInfo: any) => {
@@ -41,6 +68,7 @@ const EditConsultorioModal = ({ consultorio }: EditConsultorioProps) => {
         onCancel={handleCancel}
       >
         <Form
+          form={form}
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
           layout="vertical"
@@ -59,7 +87,12 @@ const EditConsultorioModal = ({ consultorio }: EditConsultorioProps) => {
                   },
                 ]}
               >
-                <Input placeholder="Digite o nome do consultório" />
+                <Input
+                  onChange={(e) =>
+                    setClinic({ ...clinic, name: e.target.value })
+                  }
+                  placeholder="Digite o nome do consultório"
+                />
               </Form.Item>
             </Col>
           </Row>
@@ -76,7 +109,12 @@ const EditConsultorioModal = ({ consultorio }: EditConsultorioProps) => {
                   },
                 ]}
               >
-                <Input placeholder="Digite o endereço do consultório" />
+                <Input
+                  onChange={(e) =>
+                    setClinic({ ...clinic, address: e.target.value })
+                  }
+                  placeholder="Digite o endereço do consultório"
+                />
               </Form.Item>
             </Col>
           </Row>
