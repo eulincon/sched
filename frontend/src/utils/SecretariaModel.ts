@@ -1,10 +1,10 @@
 type SecretariaModel = {
-  secretaria: {
-    id: number
-    name: string
-    cpf: string
-    address: string
-  }
+  id: number
+  name: string
+  cpf: string
+  address: string
+  main: boolean
+  clinicId: number
 }
 
 export default SecretariaModel

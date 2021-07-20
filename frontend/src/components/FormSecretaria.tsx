@@ -1,15 +1,13 @@
 import { PlusOutlined } from '@ant-design/icons'
 import { Button, Col, Drawer, Form, Input, message, Row, Select } from 'antd'
 import MaskedInput from 'antd-mask-input'
+import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import api from '../services/api'
 import ClinicModel from '../utils/ClinicModel'
 
-type FormSecretariaProps = {
-  getAllSecretarias: () => Promise<void>
-}
-
-const FormSecretaria = ({ getAllSecretarias }: FormSecretariaProps) => {
+const FormSecretaria = () => {
+  const router = useRouter()
   const [state, setState] = useState({ visible: false })
   const [clinics, setClinics] = useState<ClinicModel[]>([])
   const [form] = Form.useForm()
@@ -39,24 +37,24 @@ const FormSecretaria = ({ getAllSecretarias }: FormSecretariaProps) => {
 
   const onFinish = (values: ClinicModel) => {
     console.log('Success:', values)
-    message.loading({ content: 'Cadastrando secretária', key: values.id })
+    message.loading({ content: 'Cadastrando secretária', key: values })
     api
       .post('/secretarias', values)
       .then(() => {
         console.log('Salvo com sucesso')
         form.resetFields()
         onClose()
-        getAllSecretarias()
         message.success({
           content: 'Secretária cadastrada com sucesso',
-          key: values.id,
+          key: values,
         })
+        router.replace(router.asPath)
       })
       .catch((error) => {
         console.log(error)
         message.error({
           content: 'Erro ao cadastradar secretária',
-          key: values.id,
+          key: values,
         })
       })
   }

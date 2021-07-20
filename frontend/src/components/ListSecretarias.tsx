@@ -1,10 +1,17 @@
 import { message, Popconfirm, Row, Space, Table, Tag } from 'antd'
-import React, { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
+import React from 'react'
 import api from '../services/api'
+import SecretariaModel from '../utils/SecretariaModel'
 import EditSecretariaModel from './EditSecretariaModal'
 import FormSecretaria from './FormSecretaria'
 
-const ListSecretarias = () => {
+type SecretariaProps = {
+  secretarias: SecretariaModel[]
+}
+
+const ListSecretarias = ({ secretarias }: SecretariaProps) => {
+  const router = useRouter()
   const columns = [
     {
       title: 'Nome',
@@ -47,10 +54,7 @@ const ListSecretarias = () => {
       key: 'action',
       render: (text, record) => (
         <Space size="middle">
-          <EditSecretariaModel
-            secretaria={text}
-            getAllSecretarias={getAllSecretarias}
-          />
+          <EditSecretariaModel secretaria={text} />
           <Popconfirm
             title="Tem certeza que deseja excluir？"
             okText="Sim"
@@ -65,16 +69,23 @@ const ListSecretarias = () => {
   ]
 
   const confirmExclusion = async (id: string) => {
-    api
+    message.loading({
+      content: 'Deletando...',
+      key: id,
+    })
+    await api
       .delete(`/secretarias/${id}`)
       .then(() => {
         message.success('Secretária removida com sucesso.')
-        const newSecretarias = secretarias.filter((obj) => obj.id != id)
-        setSecretarias(newSecretarias)
+        router.replace(router.asPath)
+        message.success({
+          content: 'Secretária removida com sucesso',
+          key: id,
+        })
       })
       .catch(() => {
         console.log('Erro ao deletar secretária.')
-        message.error('Erro ao deletar secretária.')
+        message.error({ content: 'Erro ao deletar secretária', key: id })
       })
   }
 
@@ -102,35 +113,12 @@ const ListSecretarias = () => {
     },
   ]
 
-  type SecretariaProps = {
-    id: string
-    name: string
-    cpf: string
-    tags: string[]
-    address: string
-  }
+  secretarias = secretarias.map((secretaria) => ({
+    ...secretaria,
+    key: secretaria.id,
+    tags: secretaria.main ? ['main'] : [],
+  }))
 
-  const getAllSecretarias = async () => {
-    api
-      .get(`secretarias`)
-      .then((response) => {
-        response.data.map((secretary) => {
-          secretary.key = secretary.id
-
-          secretary.tags = secretary.isMain ? ['True'] : []
-          delete secretary.isMain
-        })
-        setSecretarias(response.data)
-      })
-      .catch(() => {
-        message.error('Erro ao carregar lista de secretárias.')
-      })
-  }
-
-  const [secretarias, setSecretarias] = useState<SecretariaProps[]>([])
-  useEffect(() => {
-    getAllSecretarias()
-  }, [])
   return (
     <div>
       <Table
@@ -140,7 +128,7 @@ const ListSecretarias = () => {
         dataSource={secretarias}
       />
       <Row style={{ marginTop: '2vh' }}>
-        <FormSecretaria getAllSecretarias={getAllSecretarias} />
+        <FormSecretaria />
       </Row>
     </div>
   )

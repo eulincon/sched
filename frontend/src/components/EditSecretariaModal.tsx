@@ -1,39 +1,66 @@
-import { Button, Col, Form, Input, message, Modal, Row } from 'antd'
+import { Button, Col, Form, Input, message, Modal, Row, Select } from 'antd'
 import MaskedInput from 'antd-mask-input'
-import React, { useState } from 'react'
+import { useForm } from 'antd/lib/form/Form'
+import { useRouter } from 'next/router'
+import React, { useEffect, useState } from 'react'
 import api from '../services/api'
+import ClinicModel from '../utils/ClinicModel'
 import SecretariaModel from '../utils/SecretariaModel'
 
-type Function_ = {
-  getAllSecretarias: () => Promise<void>
-} & SecretariaModel
+type EditSecretariaModalProps = {
+  secretaria: SecretariaModel
+}
 
-const EditSecretariaModal = ({ secretaria, getAllSecretarias }: Function_) => {
+const EditSecretariaModal = ({ secretaria }: EditSecretariaModalProps) => {
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [secretariaState, setSecretariaState] = useState(secretaria)
+  const router = useRouter()
+  const [clinics, setClinics] = useState<ClinicModel[]>([])
+  const { Option } = Select
+  const [form] = useForm()
+
+  const getClinics = async () => {
+    const { data } = await api.get('/consultorios')
+    setClinics(data)
+  }
+
+  useEffect(() => {
+    getClinics()
+  }, [])
 
   const showModal = () => {
     setIsModalVisible(true)
   }
 
-  const handleOk = (secretaria) => {
+  const handleOk = () => {
+    onFinish(secretariaState)
     setIsModalVisible(false)
-    onFinish(secretaria)
   }
 
   const handleCancel = () => {
+    form.resetFields()
     setIsModalVisible(false)
   }
 
-  const onFinish = (secretaria) => {
+  const onFinish = (secretaria: SecretariaModel) => {
+    message.loading({
+      content: 'Autalizando secretária...',
+      key: secretaria,
+    })
     api
       .put(`/secretarias/${secretaria.id}`, secretaria)
       .then(() => {
-        message.success('Alterações salvas com sucesso')
-        getAllSecretarias()
+        message.success({
+          content: 'Secretária atualizada com sucesso',
+          key: secretaria,
+        })
+        router.replace(router.asPath)
       })
       .catch((error) => {
-        message.error('Erro ao salvar alterações')
+        message.error({
+          content: 'Erro ao atualizar secretária',
+          key: secretaria,
+        })
         console.log('Erro: ', error)
       })
   }
@@ -50,10 +77,11 @@ const EditSecretariaModal = ({ secretaria, getAllSecretarias }: Function_) => {
       <Modal
         title="Editar secretária"
         visible={isModalVisible}
-        onOk={() => handleOk(secretariaState)}
+        onOk={handleOk}
         onCancel={handleCancel}
       >
         <Form
+          form={form}
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
           layout="vertical"
@@ -125,6 +153,37 @@ const EditSecretariaModal = ({ secretaria, getAllSecretarias }: Function_) => {
                   }
                   placeholder="Digite seu endereço"
                 />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item
+                name="clinicId"
+                label="Consultorório"
+                initialValue={secretaria.clinicId}
+                rules={[
+                  {
+                    required: true,
+                    message: 'Por favor, selecione um consultório',
+                  },
+                ]}
+              >
+                <Select
+                  placeholder="Selecione um consultório"
+                  onChange={(e) =>
+                    setSecretariaState({
+                      ...secretariaState,
+                      clinicId: Number(e.toString()),
+                    })
+                  }
+                >
+                  {clinics.map((clinic) => (
+                    <Option key={clinic.id} value={clinic.id}>
+                      {clinic.name}
+                    </Option>
+                  ))}
+                </Select>
               </Form.Item>
             </Col>
           </Row>

@@ -4,15 +4,15 @@ import {
   UserOutlined,
 } from '@ant-design/icons'
 
-export const navItemAdm = [
+export const navItemsAdm = [
   {
-    title: 'Calendário',
-    path: '#',
+    title: 'Agenda',
+    path: '/adm/agenda',
     icon: <CalendarOutlined />,
   },
   {
     title: 'Secretárias',
-    path: '#',
+    path: '/adm/secretarias',
     icon: <UserOutlined />,
   },
   {

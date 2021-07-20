@@ -5,10 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { navItemAdm } from '../utils/navBarAdm'
-import ConsultasAgendadas from './ConsultasAgendadas'
-import ListConsultorios from './ListConsultórios'
-import ListSecretarias from './ListSecretarias'
+import { navItemsAdm } from '../utils/navBarAdm'
 
 const { Header, Sider, Content } = Layout
 
@@ -38,16 +35,16 @@ const StyledLayout = styled(Layout)`
   }
 `
 
-const MainLayout = () => {
+const MainLayout = ({ children }) => {
   const [collapsed, setCollapsed] = useState(false)
   const [showChild, setShowChild] = useState(false)
-  const [activeMenu, setActiveMenu] = useState('0')
   const router = useRouter()
+  const itemActive = navItemsAdm.filter((item) => item.path == router.asPath)[0]
+  const selectedBarValue = navItemsAdm.indexOf(itemActive).toString()
 
   // Wait until after client-side hydration to show
   useEffect(() => {
     setShowChild(true)
-    console.log('router', router)
   }, [])
 
   if (!showChild) {
@@ -63,14 +60,14 @@ const MainLayout = () => {
     <StyledLayout>
       <Sider trigger={null} collapsible collapsed={collapsed}>
         <div className="logo" />
-        <Menu theme="dark" mode="inline" defaultSelectedKeys={['0']}>
-          {navItemAdm.map((index, key) => {
+        <Menu
+          theme="dark"
+          mode="inline"
+          defaultSelectedKeys={[selectedBarValue]}
+        >
+          {navItemsAdm.map((index, key) => {
             return (
-              <Menu.Item
-                key={key}
-                icon={index.icon}
-                onClick={() => setActiveMenu(key.toString())}
-              >
+              <Menu.Item key={key} icon={index.icon}>
                 <Link href={index.path}>{index.title}</Link>
               </Menu.Item>
             )
@@ -95,9 +92,7 @@ const MainLayout = () => {
             minHeight: 280,
           }}
         >
-          {activeMenu == '0' ? <ConsultasAgendadas /> : null}
-          {activeMenu == '1' ? <ListSecretarias /> : null}
-          {activeMenu == '2' ? <ListConsultorios /> : null}
+          {children}
         </Content>
       </Layout>
     </StyledLayout>

@@ -1,6 +1,7 @@
 package br.com.lincon.sched.controllers;
 
 import br.com.lincon.sched.dtos.SecretariaRequest;
+import br.com.lincon.sched.dtos.SecretariaResponse;
 import br.com.lincon.sched.entities.Consultorio;
 import br.com.lincon.sched.entities.Secretaria;
 import br.com.lincon.sched.exceptionhandlers.NegocioException;
@@ -17,6 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/secretarias")
@@ -26,11 +28,13 @@ public class SecretariaController {
     SecretariaRepository secretariaRepository;
     @Autowired
     ConsultorioRepository consultorioRepository;
+    ModelMapper modelMapper = new ModelMapper();
 
     @GetMapping
-    public ResponseEntity<List<Secretaria>> findAll(){
+    public ResponseEntity<List<SecretariaResponse>> findAll(){
         List<Secretaria> all = secretariaRepository.findAll();
-        return ResponseEntity.ok(all);
+        List<SecretariaResponse> secretariasResponse = all.stream().map(secretaria -> modelMapper.map(secretaria, SecretariaResponse.class)).collect(Collectors.toList());
+        return ResponseEntity.ok(secretariasResponse);
     }
 
     @PostMapping
