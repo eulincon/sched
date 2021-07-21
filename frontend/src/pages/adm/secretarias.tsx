@@ -1,8 +1,8 @@
 import { GetServerSideProps } from 'next'
 import Error from 'next/error'
 import React from 'react'
+import LayoutMain from '../../components/LayoutMain'
 import ListSecretarias from '../../components/ListSecretarias'
-import MainLayout from '../../components/MainLayout'
 import api from '../../services/api'
 
 export default function Secretarias({ data, errorCode }) {
@@ -12,7 +12,7 @@ export default function Secretarias({ data, errorCode }) {
   return <ListSecretarias secretarias={data} />
 }
 
-Secretarias.getLayout = (page) => <MainLayout>{page}</MainLayout>
+Secretarias.getLayout = (page) => <LayoutMain>{page}</LayoutMain>
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   try {

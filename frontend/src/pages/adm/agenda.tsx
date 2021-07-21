@@ -1,6 +1,6 @@
 import React from 'react'
 import ConsultasAgendadas from '../../components/ConsultasAgendadas'
-import MainLayout from '../../components/MainLayout'
+import LayoutMain from '../../components/LayoutMain'
 
 export default function Agenda() {
   // <MainLayout>
@@ -8,4 +8,4 @@ export default function Agenda() {
   // </MainLayout>
 }
 
-Agenda.getLayout = (page) => <MainLayout>{page}</MainLayout>
+Agenda.getLayout = (page) => <LayoutMain>{page}</LayoutMain>
