@@ -76,12 +76,11 @@ const ListSecretarias = ({ secretarias }: SecretariaProps) => {
     await api
       .delete(`/secretarias/${id}`)
       .then(() => {
-        message.success('Secretária removida com sucesso.')
-        router.replace(router.asPath)
         message.success({
           content: 'Secretária removida com sucesso',
           key: id,
         })
+        router.replace(router.asPath)
       })
       .catch(() => {
         console.log('Erro ao deletar secretária.')

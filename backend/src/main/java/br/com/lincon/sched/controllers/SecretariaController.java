@@ -18,6 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -51,7 +52,14 @@ public class SecretariaController {
         secretariaToUpdate.setName(secretaria.getName());
         secretariaToUpdate.setCpf(secretaria.getCpf());
         secretariaToUpdate.setAddress(secretaria.getAddress());
-        secretariaToUpdate.setMain(secretaria.isMain());
+        if(secretaria.isMain() != secretariaToUpdate.isMain()){
+            secretariaToUpdate.setMain(secretaria.isMain());
+            Optional<Secretaria> secretariaMain = secretariaRepository.findByIsMain(true);
+            if(!secretariaMain.isEmpty()) {
+                secretariaMain.get().setMain(false);
+                secretariaRepository.save(secretariaMain.get());
+            }
+        }
         secretariaRepository.save(secretariaToUpdate);
         return ResponseEntity.ok().build();
     }
@@ -66,7 +74,7 @@ public class SecretariaController {
     @Transactional
     @PutMapping("{id}/updateMain")
     public ResponseEntity updateMainSecretaria(@PathVariable Long id) {
-        Secretaria secretariaMainAnterior = secretariaRepository.findByIsMain(true);
+        Secretaria secretariaMainAnterior = secretariaRepository.findByIsMain(true).get();
         secretariaMainAnterior.setMain(false);
         Secretaria secretariaMainAtual = secretariaRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         secretariaMainAtual.setMain(true);

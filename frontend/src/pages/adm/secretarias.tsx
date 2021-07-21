@@ -2,16 +2,17 @@ import { GetServerSideProps } from 'next'
 import Error from 'next/error'
 import React from 'react'
 import ListSecretarias from '../../components/ListSecretarias'
+import MainLayout from '../../components/MainLayout'
 import api from '../../services/api'
 
-export default function Consultorios({ data, errorCode }) {
+export default function Secretarias({ data, errorCode }) {
   if (errorCode) {
     return <Error statusCode={errorCode} />
   }
-  // <MainLayout>
-  // </MainLayout>
   return <ListSecretarias secretarias={data} />
 }
+
+Secretarias.getLayout = (page) => <MainLayout>{page}</MainLayout>
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   try {

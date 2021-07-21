@@ -44,11 +44,12 @@ const EditConsultorioModal = ({ consultorio }: EditConsultorioProps) => {
         })
         router.replace(router.asPath)
       })
-      .catch(() => {
+      .catch((error) => {
         message.error({
           content: 'Erro ao atualizar consultório',
           key: clinic.id,
         })
+        console.log('Erro: ', error)
       })
   }
 

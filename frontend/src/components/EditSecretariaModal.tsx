@@ -1,4 +1,15 @@
-import { Button, Col, Form, Input, message, Modal, Row, Select } from 'antd'
+import { CheckOutlined, CloseOutlined } from '@ant-design/icons'
+import {
+  Button,
+  Col,
+  Form,
+  Input,
+  message,
+  Modal,
+  Row,
+  Select,
+  Switch,
+} from 'antd'
 import MaskedInput from 'antd-mask-input'
 import { useForm } from 'antd/lib/form/Form'
 import { useRouter } from 'next/router'
@@ -12,12 +23,13 @@ type EditSecretariaModalProps = {
 }
 
 const EditSecretariaModal = ({ secretaria }: EditSecretariaModalProps) => {
+  const [form] = useForm()
   const [isModalVisible, setIsModalVisible] = useState(false)
-  const [secretariaState, setSecretariaState] = useState(secretaria)
+  const [secretariaState, setSecretariaState] =
+    useState<SecretariaModel>(secretaria)
   const router = useRouter()
   const [clinics, setClinics] = useState<ClinicModel[]>([])
   const { Option } = Select
-  const [form] = useForm()
 
   const getClinics = async () => {
     const { data } = await api.get('/consultorios')
@@ -30,6 +42,7 @@ const EditSecretariaModal = ({ secretaria }: EditSecretariaModalProps) => {
 
   const showModal = () => {
     setIsModalVisible(true)
+    form.resetFields()
   }
 
   const handleOk = () => {
@@ -42,24 +55,24 @@ const EditSecretariaModal = ({ secretaria }: EditSecretariaModalProps) => {
     setIsModalVisible(false)
   }
 
-  const onFinish = (secretaria: SecretariaModel) => {
+  const onFinish = async (secretaria: SecretariaModel) => {
     message.loading({
       content: 'Autalizando secretária...',
-      key: secretaria,
+      key: secretaria.id,
     })
-    api
+    await api
       .put(`/secretarias/${secretaria.id}`, secretaria)
       .then(() => {
         message.success({
           content: 'Secretária atualizada com sucesso',
-          key: secretaria,
+          key: secretaria.id,
         })
         router.replace(router.asPath)
       })
       .catch((error) => {
         message.error({
           content: 'Erro ao atualizar secretária',
-          key: secretaria,
+          key: secretaria.id,
         })
         console.log('Erro: ', error)
       })
@@ -184,6 +197,26 @@ const EditSecretariaModal = ({ secretaria }: EditSecretariaModalProps) => {
                     </Option>
                   ))}
                 </Select>
+              </Form.Item>
+            </Col>
+            <Col>
+              <Form.Item
+                valuePropName="checked"
+                initialValue={secretaria.main}
+                name="main"
+                label="Secretária principal"
+              >
+                <Switch
+                  checkedChildren={<CheckOutlined />}
+                  unCheckedChildren={<CloseOutlined />}
+                  // defaultChecked={!secretaria.main}
+                  onChange={() =>
+                    setSecretariaState({
+                      ...secretariaState,
+                      main: !secretaria.main,
+                    })
+                  }
+                />
               </Form.Item>
             </Col>
           </Row>

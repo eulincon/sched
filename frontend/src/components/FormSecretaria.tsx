@@ -48,7 +48,6 @@ const FormSecretaria = () => {
           content: 'Secretária cadastrada com sucesso',
           key: values,
         })
-        router.replace(router.asPath)
       })
       .catch((error) => {
         console.log(error)
@@ -56,6 +55,9 @@ const FormSecretaria = () => {
           content: 'Erro ao cadastradar secretária',
           key: values,
         })
+      })
+      .finally(() => {
+        router.replace(router.asPath)
       })
   }
 

@@ -1,8 +1,7 @@
 import 'antd/dist/antd.css'
 import Error from 'next/error'
-import MainLayout from '../components/MainLayout'
 
-function MyApp({ Component, pageProps }) {
+export default function MyApp({ Component, pageProps }) {
   if (pageProps.error)
     return (
       <Error
@@ -10,11 +9,8 @@ function MyApp({ Component, pageProps }) {
         title={pageProps.error.message}
       />
     )
-  return (
-    <MainLayout>
-      <Component {...pageProps} />
-    </MainLayout>
-  )
-}
+  // Use the layout defined at the page level, if available
+  const getLayout = Component.getLayout || ((page) => page)
 
-export default MyApp
+  return getLayout(<Component {...pageProps} />)
+}
