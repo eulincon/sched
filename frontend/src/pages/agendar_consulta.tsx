@@ -1,8 +1,10 @@
 import { Button, Calendar, Col, Form, Input, Row, Select } from 'antd'
+import moment from 'moment'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import LayoutHeader from '../components/LayoutHeader'
 import ClinicModel from '../utils/ClinicModel'
+import ScheduleRequestModel from '../utils/ScheduleRequestModel'
 
 const { Option } = Select
 
@@ -21,6 +23,8 @@ export default function AgendarConsulta() {
   const [form] = Form.useForm()
   const [clinics, setClinics] = useState<ClinicModel[]>([])
   const [selectedClinic, setSelectedClinic] = useState('')
+  const [schedule, setSchedule] = useState<ScheduleRequestModel>()
+  const [date, setDate] = useState(moment)
 
   const getClinics = async () => {
     // const { data } = await api.get('/consultorios')
@@ -36,14 +40,26 @@ export default function AgendarConsulta() {
   }, [])
 
   const onSelect = (value) => {
-    console.log(value.format('YYYY-MM-DD'))
+    setDate(value)
+    // const time = value
+    //   .set({ hour: 20, minute: 0, seconds: 0 })
+    //   .format('YYYY-MM-DD HH:mm:ss')
+    // console.log(time)
+    // setSchedule({ ...schedule, time: time })
   }
+
   function onPanelChange(value, mode) {
-    // console.log(value, mode)
+    // console.log('onPanelChange: ', value, mode)
   }
 
   const onFinish = (values: any) => {
-    console.log(values)
+    const hour = moment(values.horario, 'h:mm a').get('hour')
+    const minutes = moment(values.horario, 'h:mm').get('minutes')
+    const time = date
+      .set({ hour: hour, minute: minutes, seconds: 0 })
+      .format('YYYY-MM-DD HH:mm:ss')
+    setSchedule({ ...values, time: time })
+    console.log('ScheduleRequest: ', schedule)
   }
 
   return (
@@ -163,15 +179,15 @@ export default function AgendarConsulta() {
         </Col>
         <Col span={8}>
           <Form.Item
-            name="horario"
+            name="time"
             label="Horário"
             rules={[{ required: true }]}
             // style={{ width: 300, margin: '0 10px' }}
           >
             <Select placeholder="Selecione um horário">
-              <Option value="male">08:00</Option>
-              <Option value="female">13:00</Option>
-              <Option value="other">16:00</Option>
+              <Option value="08:00">08:00</Option>
+              <Option value="13:00">13:00</Option>
+              <Option value="16:00">16:00</Option>
             </Select>
           </Form.Item>
           <Form.Item name="deatils" label="Detalhes">
