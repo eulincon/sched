@@ -1,5 +1,6 @@
 import { Button, Col, Form, Input, Row } from 'antd'
 import Title from 'antd/lib/typography/Title'
+import Link from 'next/link'
 import LayoutHeader from '../components/LayoutHeader'
 
 const layout = {
@@ -37,19 +38,6 @@ export default function Home() {
         >
           <Title level={2}>Solicitar consulta</Title>
           <Form.Item
-            label="Nome completo"
-            name="name"
-            rules={[
-              {
-                required: true,
-                message: 'Por favor, entre com seu nome',
-              },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-
-          <Form.Item
             label="Email"
             name="email"
             rules={[
@@ -62,9 +50,25 @@ export default function Home() {
             <Input />
           </Form.Item>
 
+          <Form.Item
+            label="Senha"
+            name="password"
+            rules={[
+              {
+                required: true,
+                message: 'Por favor, entre com sua senha',
+              },
+            ]}
+          >
+            <Input />
+          </Form.Item>
+
           <Form.Item {...tailLayout}>
             <Button type="primary" htmlType="submit">
-              Agendar
+              Login
+            </Button>
+            <Button type="primary" style={{ float: 'right' }}>
+              <Link href="/criar_conta">Criar conta</Link>
             </Button>
           </Form.Item>
         </Form>

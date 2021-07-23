@@ -1,9 +1,10 @@
 type ScheduleRequestModel = {
   clinicId: number
   details: string
-  email: string
+  userEmail: string
+  userCpf: string
   time: string
-  name: string
+  userName: string
 }
 
 export default ScheduleRequestModel

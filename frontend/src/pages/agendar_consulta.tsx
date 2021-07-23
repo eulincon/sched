@@ -1,8 +1,10 @@
-import { Button, Calendar, Col, Form, Input, Row, Select } from 'antd'
+import { Button, Calendar, Col, Form, Input, message, Row, Select } from 'antd'
+import { MaskedInput } from 'antd-mask-input'
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import LayoutHeader from '../components/LayoutHeader'
+import api from '../services/api'
 import ClinicModel from '../utils/ClinicModel'
 import ScheduleRequestModel from '../utils/ScheduleRequestModel'
 
@@ -41,25 +43,33 @@ export default function AgendarConsulta() {
 
   const onSelect = (value) => {
     setDate(value)
-    // const time = value
-    //   .set({ hour: 20, minute: 0, seconds: 0 })
-    //   .format('YYYY-MM-DD HH:mm:ss')
-    // console.log(time)
-    // setSchedule({ ...schedule, time: time })
   }
 
   function onPanelChange(value, mode) {
     // console.log('onPanelChange: ', value, mode)
   }
 
-  const onFinish = (values: any) => {
-    const hour = moment(values.horario, 'h:mm a').get('hour')
-    const minutes = moment(values.horario, 'h:mm').get('minutes')
+  const onFinish = async (values: ScheduleRequestModel) => {
+    message.loading({ content: 'Agendando...', key: values })
+    const hour = moment(values.time, 'HH:mm').get('hour')
+    const minutes = moment(values.time, 'HH:mm').get('minutes')
     const time = date
       .set({ hour: hour, minute: minutes, seconds: 0 })
-      .format('YYYY-MM-DD HH:mm:ss')
-    setSchedule({ ...values, time: time })
-    console.log('ScheduleRequest: ', schedule)
+      .format('YYYY-MM-DD HH:mm')
+    values.time = time
+    console.log(values)
+    await api
+      .post('/appointments', values)
+      .then(() => {
+        message.success({
+          content: 'Solicitação de agendamento confirmado',
+          key: values,
+        })
+      })
+      .catch((error) => {
+        message.error({ content: 'Erro na solicitação', key: values })
+        console.log('Error: ', error)
+      })
   }
 
   return (
@@ -190,7 +200,7 @@ export default function AgendarConsulta() {
               <Option value="16:00">16:00</Option>
             </Select>
           </Form.Item>
-          <Form.Item name="deatils" label="Detalhes">
+          <Form.Item name="details" label="Detalhes">
             <Input.TextArea />
           </Form.Item>
           <Form.Item
@@ -221,10 +231,35 @@ export default function AgendarConsulta() {
             }`}
         </Col>
         <Col span={8}>
-          <Form.Item name="name" label="Nome" rules={[{ required: true }]}>
+          <Form.Item
+            name="userName"
+            label="Nome"
+            rules={[
+              { required: true, message: 'Pro favor, digite o seu nome' },
+            ]}
+          >
             <Input />
           </Form.Item>
-          <Form.Item name="email" label="Email" rules={[{ required: true }]}>
+          <Form.Item
+            name="userCpf"
+            label="CPF"
+            rules={[
+              {
+                required: true,
+                message: 'Por favor, digite o CPF',
+                pattern: /^\d{3}\.\d{3}\.\d{3}\-\d{2}$/,
+              },
+            ]}
+          >
+            <MaskedInput placeholder="Digite seu CPF" mask="111.111.111-11" />
+          </Form.Item>
+          <Form.Item
+            name="userEmail"
+            label="Email"
+            rules={[
+              { required: true, message: 'Pro favor, digite o seu nome' },
+            ]}
+          >
             <Input />
           </Form.Item>
           <Form.Item
