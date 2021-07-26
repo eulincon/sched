@@ -1,5 +1,5 @@
 package br.com.lincon.sched.entities;
 
-public enum AppointmentsStatus {
+public enum AppointmentStatus {
   CONCLUIDO, PENDENTE, REAGENDANDO, RECUSADO, CANCELADO, CONFIRMADO
 }

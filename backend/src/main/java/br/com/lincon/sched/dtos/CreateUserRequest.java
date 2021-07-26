@@ -10,7 +10,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 @Data
-public class UsuarioRequest {
+public class CreateUserRequest {
 
   @NotBlank
   private String name;
@@ -24,6 +24,13 @@ public class UsuarioRequest {
   private String password;
 
   public Usuario toModel() {
-    return Usuario.builder().name(this.name).cpf(this.cpf).email(this.email).password(new BCryptPasswordEncoder().encode(this.password)).type(UserType.PATIENT).build();
+    return Usuario
+        .builder()
+        .name(this.name)
+        .cpf(this.cpf)
+        .email(this.email)
+        .password(new BCryptPasswordEncoder().encode(this.password))
+        .type(UserType.PATIENT)
+        .build();
   }
 }

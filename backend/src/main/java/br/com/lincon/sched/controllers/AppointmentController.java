@@ -1,11 +1,9 @@
 package br.com.lincon.sched.controllers;
 
 import br.com.lincon.sched.dtos.AppointmentRequest;
-import br.com.lincon.sched.entities.Appointment;
-import br.com.lincon.sched.entities.Consultorio;
-import br.com.lincon.sched.entities.UserType;
-import br.com.lincon.sched.entities.Usuario;
+import br.com.lincon.sched.entities.*;
 import br.com.lincon.sched.exceptionhandlers.NegocioException;
+import br.com.lincon.sched.repositories.AppointmentLogRepository;
 import br.com.lincon.sched.repositories.AppointmentRepository;
 import br.com.lincon.sched.repositories.ConsultorioRepository;
 import br.com.lincon.sched.repositories.UsuarioRepository;
@@ -14,12 +12,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.websocket.server.PathParam;
+import java.time.Instant;
 import java.util.Optional;
 
 @RestController
@@ -34,14 +31,27 @@ public class AppointmentController {
   UsuarioRepository usuarioRepository;
   @Autowired
   AppointmentRepository appointmentRepository;
+  @Autowired
+  AppointmentLogRepository appointmentLogRepository;
 
-  @PostMapping
-  public ResponseEntity<Appointment> create(@Valid @RequestBody AppointmentRequest appointmentRequest) {
+  @PutMapping("/{id}")
+  public ResponseEntity updateStatus(@PathVariable Long id,@RequestParam String status) {
+    Appointment appointment = appointmentRepository.findById(id).orElseThrow(() -> new NegocioException("Consulta não encontrada"));
 
-    Appointment appointment = appointmentRequest.toModel(appointmentRepository, consultorioRepository, usuarioRepository);
+    AppointmentLog appointmentLog = AppointmentLog.builder().appointment(appointment).timestamp(Instant.now()).appointmentStatus(AppointmentStatus.valueOf(status)).build();
 
-    appointmentRepository.save(appointment);
+    appointmentLogRepository.save(appointmentLog);
 
-    return ResponseEntity.ok(appointment);
+    return ResponseEntity.ok().build();
   }
+
+//  @PostMapping
+//  public ResponseEntity<Appointment> create(@Valid @RequestBody AppointmentRequest appointmentRequest) {
+//
+//    Appointment appointment = appointmentRequest.toModel(appointmentRepository, consultorioRepository, usuarioRepository);
+//
+//    appointmentRepository.save(appointment);
+//
+//    return ResponseEntity.ok(appointment);
+//  }
 }
