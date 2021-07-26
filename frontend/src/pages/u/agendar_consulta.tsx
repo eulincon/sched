@@ -1,12 +1,11 @@
 import { Button, Calendar, Col, Form, Input, message, Row, Select } from 'antd'
-import { MaskedInput } from 'antd-mask-input'
 import moment from 'moment'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import LayoutHeader from '../components/LayoutHeader'
-import api from '../services/api'
-import ClinicModel from '../utils/ClinicModel'
-import ScheduleRequestModel from '../utils/ScheduleRequestModel'
+import LayoutMain from '../../components/LayoutMain'
+import api from '../../services/api'
+import ClinicModel from '../../utils/ClinicModel'
+import ScheduleRequestModel from '../../utils/ScheduleRequestModel'
 
 const { Option } = Select
 
@@ -59,7 +58,7 @@ export default function AgendarConsulta() {
     values.time = time
     console.log(values)
     await api
-      .post('/appointments', values)
+      .post(`/user/${1}/appointments`, values)
       .then(() => {
         message.success({
           content: 'Solicitação de agendamento confirmado',
@@ -229,8 +228,11 @@ export default function AgendarConsulta() {
               clinics.filter((e) => e.id.toString() == selectedClinic)[0]
                 .address
             }`}
+          <Button type="primary" htmlType="submit" style={{ float: 'right' }}>
+            Solicitar agendamento
+          </Button>
         </Col>
-        <Col span={8}>
+        {/* <Col span={8}>
           <Form.Item
             name="userName"
             label="Nome"
@@ -267,14 +269,11 @@ export default function AgendarConsulta() {
               marginTop: 50,
             }}
           >
-            <Button type="primary" htmlType="submit" style={{ float: 'right' }}>
-              Solicitar agendamento
-            </Button>
           </Form.Item>
-        </Col>
+        </Col> */}
       </Row>
     </Form>
   )
 }
 
-AgendarConsulta.getLayout = (page) => <LayoutHeader>{page}</LayoutHeader>
+AgendarConsulta.getLayout = (page) => <LayoutMain>{page}</LayoutMain>

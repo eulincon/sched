@@ -6,6 +6,7 @@ import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { navItemsAdm } from '../utils/navBarAdm'
+import { navItemsPatient } from '../utils/navBarPatient'
 
 const { Header, Sider, Content } = Layout
 
@@ -35,12 +36,15 @@ const StyledLayout = styled(Layout)`
   }
 `
 
-const MainLayout = ({ children }) => {
+const LayoutMain = ({ children }) => {
   const [collapsed, setCollapsed] = useState(false)
   const [showChild, setShowChild] = useState(false)
   const router = useRouter()
-  const itemActive = navItemsAdm.filter((item) => item.path == router.asPath)[0]
-  const selectedBarValue = navItemsAdm.indexOf(itemActive).toString()
+  const navItems = router.asPath.startsWith('/u')
+    ? navItemsPatient
+    : navItemsAdm
+  const itemActive = navItems.filter((item) => item.path == router.asPath)[0]
+  const selectedBarValue = navItems.indexOf(itemActive).toString()
 
   // Wait until after client-side hydration to show
   useEffect(() => {
@@ -65,7 +69,7 @@ const MainLayout = ({ children }) => {
           mode="inline"
           defaultSelectedKeys={[selectedBarValue]}
         >
-          {navItemsAdm.map((index, key) => {
+          {navItems.map((index, key) => {
             return (
               <Menu.Item key={key} icon={index.icon}>
                 <Link href={index.path}>{index.title}</Link>
@@ -99,4 +103,4 @@ const MainLayout = ({ children }) => {
   )
 }
 
-export default MainLayout
+export default LayoutMain

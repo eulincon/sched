@@ -1,5 +1,6 @@
 import { Button, Form, Input, message } from 'antd'
 import { MaskedInput } from 'antd-mask-input'
+import { AxiosError } from 'axios'
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import LayoutHeader from '../components/LayoutHeader'
@@ -35,17 +36,17 @@ export default function CriarConta() {
 
   const onFinish = async (values: CreateUserRequest) => {
     console.log('Received values of form: ', values)
-    message.loading({ content: 'Criando usuário', key: values })
+    message.loading({ content: 'Criando usuário', key: values, duration: 0 })
     await api
       .post('/user', values)
       .then((data) => {
         route.push('/')
         message.success({ content: 'Usuário criado com sucesso', key: values })
       })
-      .catch((err) => {
+      .catch((err: AxiosError) => {
         if (err.response.data.status === 400) {
           message.error({
-            content: `Erro ao criar usuário: ${err.response.data.titulo}`,
+            content: `Erro ao criar usuário: CPF inválido`,
             key: values,
             duration: 3,
           })
@@ -55,6 +56,13 @@ export default function CriarConta() {
             key: values,
           })
         }
+      })
+      .catch(() => {
+        message.error({
+          content: `Sem conexão com o servidor`,
+          key: values,
+          duration: 3,
+        })
       })
   }
 

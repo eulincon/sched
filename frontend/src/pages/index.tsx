@@ -1,7 +1,10 @@
-import { Button, Col, Form, Input, Row } from 'antd'
+import { Button, Col, Form, Input, message, Row } from 'antd'
 import Title from 'antd/lib/typography/Title'
+import { AxiosError } from 'axios'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import LayoutHeader from '../components/LayoutHeader'
+import api from '../services/api'
 
 const layout = {
   labelCol: { span: 12 },
@@ -12,8 +15,29 @@ const tailLayout = {
 }
 
 export default function Home() {
+  const route = useRouter()
+
   const onFinish = (values: any) => {
-    console.log('Success:', values)
+    message.loading({ content: 'Carrengando...', key: values, duration: 0 })
+    api
+      .post('user/login', values)
+      .then(() => {
+        route.push('/u', undefined, { shallow: true })
+        message.destroy(values)
+      })
+      .catch((err: AxiosError) => {
+        message.error({
+          content: `${err.response.data.titulo}`,
+          key: values,
+        })
+      })
+      .catch(() => {
+        message.error({
+          content: `Sem conexão com o servidor`,
+          key: values,
+          duration: 3,
+        })
+      })
   }
 
   const onFinishFailed = (errorInfo: any) => {
