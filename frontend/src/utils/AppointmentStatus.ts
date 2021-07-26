@@ -1,0 +1,10 @@
+type appointmentStatus = {
+  PENDENTE: 'PENDENTE'
+  CONCLUIDO: 'CONCLUIDO'
+  REAGENDANDO: 'REAGENDANDO'
+  RECUSADO: 'RECUSADO'
+  CANCELADO: 'CANCELADO'
+  CONFIRMADO: 'CONFIRMADO'
+}
+
+export default appointmentStatus

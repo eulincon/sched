@@ -1,52 +1,75 @@
-import { message, Popconfirm, Row, Space, Table, Tag } from 'antd'
+import { message, Popconfirm, Space, Table, Tag } from 'antd'
+import moment from 'moment'
 import { useRouter } from 'next/router'
 import React from 'react'
 import api from '../services/api'
+import AppointmentModel from '../utils/AppointmentModel'
 import EditSecretariaModel from './EditSecretariaModal'
-import FormSecretaria from './FormSecretaria'
 
 type AppointmentsProps = {
-  appointments: string
+  appointments: AppointmentModel[]
 }
 
-const ListAppointments = ({ secretarias }) => {
+const ListAppointments = ({ appointments }: AppointmentsProps) => {
   const router = useRouter()
   const columns = [
     {
-      title: 'Nome',
-      dataIndex: 'name',
-      key: 'name',
-      render: (text) => <a>{text}</a>,
+      title: 'Clinica',
+      dataIndex: 'clinic',
+      key: 'clinic',
+      render: (text) => <a>{text.name}</a>,
     },
     {
-      title: 'CPF',
-      dataIndex: 'cpf',
-      key: 'cpf',
+      title: 'Horário',
+      dataIndex: 'time',
+      key: 'time',
+      render: (time) => moment(time).format('DD/MM/yyyy HH:mm'),
     },
     {
-      title: 'Endereço',
-      dataIndex: 'address',
-      key: 'address',
+      title: 'Detalhes',
+      dataIndex: 'details',
+      key: 'details',
     },
     {
-      title: 'Tags',
-      key: 'tags',
+      title: 'Status',
+      key: 'status',
       dataIndex: 'tags',
-      render: (tags) => (
-        <span>
-          {tags.map((tag) => {
+      render: (status) => {
+        let color = ''
+        switch (status) {
+          case 'PENDETE':
+            color = 'orange'
+            break
+          case 'CONCLUIDO':
+            color = 'green'
+            break
+          case 'REAGENDANDO':
+            color = 'blue'
+            break
+          case 'RECUSADO':
+            color = 'red'
+            break
+          case 'CANCELADO':
+            color = 'volcano'
+            break
+          case 'CONFIRMADO':
+            color = '#87d068'
+        }
+
+        return (
+          <span>
+            {/* {tags.map((tag) => {
             let color = tag.length > 5 ? 'geekblue' : 'green'
             if (tag === 'loser') {
               color = 'volcano'
             }
             return (
-              <Tag color={color} key={tag}>
-                {tag.toUpperCase()}
-              </Tag>
             )
-          })}
-        </span>
-      ),
+          })} */}
+            <Tag color={'blue'}>{status}</Tag>
+          </span>
+        )
+      },
     },
     {
       title: 'Ação',
@@ -76,45 +99,22 @@ const ListAppointments = ({ secretarias }) => {
       .delete(`/secretarias/${id}`)
       .then(() => {
         message.success({
-          content: 'Secretária removida com sucesso',
+          content: 'Consulta removida com sucesso',
           key: id,
         })
         router.replace(router.asPath)
       })
       .catch(() => {
-        console.log('Erro ao deletar secretária.')
-        message.error({ content: 'Erro ao deletar secretária', key: id })
+        console.log('Erro ao deletar consulta.')
+        message.error({ content: 'Erro ao deletar consulta', key: id })
       })
   }
 
-  const data = [
-    {
-      key: '1',
-      name: 'Ana da Silva',
-      cpf: '111.111.111-11',
-      address: 'Rua Fom José',
-      tags: ['nice', 'developer'],
-    },
-    {
-      key: '2',
-      name: 'Elena',
-      cpf: '111.111.111-11',
-      address: 'Rua Amélia Sousa',
-      tags: ['master'],
-    },
-    {
-      key: '3',
-      name: 'Lucia',
-      cpf: '111.111.111-11',
-      address: 'Rua Jose de Alencar',
-      tags: ['cool', 'teacher'],
-    },
-  ]
-
-  secretarias = secretarias.map((secretaria) => ({
-    ...secretaria,
-    key: secretaria.id,
-    tags: secretaria.main ? ['main'] : [],
+  appointments = appointments.map((appointment) => ({
+    ...appointment,
+    key: appointment.id,
+    tags: appointment.appointmentLog[appointment.appointmentLog.length - 1]
+      .appointmentStatus,
   }))
 
   return (
@@ -123,11 +123,8 @@ const ListAppointments = ({ secretarias }) => {
         columns={columns}
         pagination={false}
         bordered={true}
-        dataSource={secretarias}
+        dataSource={appointments}
       />
-      <Row style={{ marginTop: '2vh' }}>
-        <FormSecretaria />
-      </Row>
     </div>
   )
 }

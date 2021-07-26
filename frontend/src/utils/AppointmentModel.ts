@@ -1,8 +1,17 @@
+import ClinicModel from './ClinicModel'
+
+type AppointmentLog = {
+  appointmentStatus: string
+  id: number
+  timestamp: Date
+}
+
 type AppointmentModel = {
   id: number
-  name: string
-  address: string
-  active: boolean
+  details: string
+  time: Date
+  appointmentLog: AppointmentLog[]
+  clinic: ClinicModel
 }
 
 export default AppointmentModel
