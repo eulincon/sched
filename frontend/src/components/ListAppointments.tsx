@@ -2,15 +2,14 @@ import { message, Popconfirm, Row, Space, Table, Tag } from 'antd'
 import { useRouter } from 'next/router'
 import React from 'react'
 import api from '../services/api'
-import SecretariaModel from '../utils/SecretariaModel'
 import EditSecretariaModel from './EditSecretariaModal'
 import FormSecretaria from './FormSecretaria'
 
-type SecretariaProps = {
-  secretarias: SecretariaModel[]
+type AppointmentsProps = {
+  appointments: string
 }
 
-const ListSecretarias = ({ secretarias }: SecretariaProps) => {
+const ListAppointments = ({ secretarias }) => {
   const router = useRouter()
   const columns = [
     {
@@ -133,4 +132,4 @@ const ListSecretarias = ({ secretarias }: SecretariaProps) => {
   )
 }
 
-export default ListSecretarias
+export default ListAppointments
