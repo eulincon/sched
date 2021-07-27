@@ -1,5 +1,6 @@
 import { Button, Calendar, Col, Form, Input, message, Row, Select } from 'antd'
 import moment from 'moment'
+import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import LayoutMain from '../../components/LayoutMain'
@@ -21,6 +22,7 @@ const layout = {
 }
 
 export default function AgendarConsulta() {
+  const route = useRouter()
   const [form] = Form.useForm()
   const [clinics, setClinics] = useState<ClinicModel[]>([])
   const [selectedClinic, setSelectedClinic] = useState('')
@@ -64,6 +66,7 @@ export default function AgendarConsulta() {
           content: 'Solicitação de agendamento confirmado',
           key: values,
         })
+        route.replace('/u')
       })
       .catch((error) => {
         message.error({ content: 'Erro na solicitação', key: values })

@@ -43,13 +43,15 @@ const LayoutMain = ({ children }) => {
   const navItems = router.asPath.startsWith('/u')
     ? navItemsPatient
     : navItemsAdm
-  const itemActive = navItems.filter((item) => item.path == router.asPath)[0]
-  const selectedBarValue = navItems.indexOf(itemActive).toString()
+  // const itemActive = navItems.filter((item) => item.path == router.asPath)[0]
+  const [selectedBarValue, setSelectedBarValue] = useState('')
 
   // Wait until after client-side hydration to show
   useEffect(() => {
+    const itemActive = navItems.filter((item) => item.path == router.asPath)[0]
+    setSelectedBarValue(navItems.indexOf(itemActive).toString())
     setShowChild(true)
-  }, [])
+  }, [router])
 
   if (!showChild) {
     // You can show some kind of placeholder UI here
@@ -67,8 +69,11 @@ const LayoutMain = ({ children }) => {
         <Menu
           theme="dark"
           mode="inline"
-          defaultSelectedKeys={[selectedBarValue]}
+          // defaultSelectedKeys={[selectedBarValue]}
+          selectedKeys={[selectedBarValue]}
+          activeKey={selectedBarValue}
         >
+          {console.log(selectedBarValue)}
           {navItems.map((index, key) => {
             return (
               <Menu.Item key={key} icon={index.icon}>

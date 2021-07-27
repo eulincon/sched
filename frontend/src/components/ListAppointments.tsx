@@ -1,10 +1,10 @@
-import { message, Popconfirm, Space, Table, Tag } from 'antd'
+import { message, Space, Table, Tag } from 'antd'
 import moment from 'moment'
 import { useRouter } from 'next/router'
 import React from 'react'
 import api from '../services/api'
 import AppointmentModel from '../utils/AppointmentModel'
-import EditSecretariaModel from './EditSecretariaModal'
+import AppointmentInfo from './AppointmentInfo'
 
 type AppointmentsProps = {
   appointments: AppointmentModel[]
@@ -17,7 +17,7 @@ const ListAppointments = ({ appointments }: AppointmentsProps) => {
       title: 'Clinica',
       dataIndex: 'clinic',
       key: 'clinic',
-      render: (text) => <a>{text.name}</a>,
+      render: (text) => text.name,
     },
     {
       title: 'Horário',
@@ -37,7 +37,7 @@ const ListAppointments = ({ appointments }: AppointmentsProps) => {
       render: (status) => {
         let color = ''
         switch (status) {
-          case 'PENDETE':
+          case 'PENDENTE':
             color = 'orange'
             break
           case 'CONCLUIDO':
@@ -66,7 +66,7 @@ const ListAppointments = ({ appointments }: AppointmentsProps) => {
             return (
             )
           })} */}
-            <Tag color={'blue'}>{status}</Tag>
+            <Tag color={color}>{status}</Tag>
           </span>
         )
       },
@@ -76,15 +76,15 @@ const ListAppointments = ({ appointments }: AppointmentsProps) => {
       key: 'action',
       render: (text, record) => (
         <Space size="middle">
-          <EditSecretariaModel secretaria={text} />
-          <Popconfirm
+          <AppointmentInfo appointment={text} />
+          {/* <Popconfirm
             title="Tem certeza que deseja excluir？"
             okText="Sim"
             cancelText="Não"
             onConfirm={() => confirmExclusion(text.id)}
           >
             <a>Deletar</a>
-          </Popconfirm>
+          </Popconfirm> */}
         </Space>
       ),
     },
