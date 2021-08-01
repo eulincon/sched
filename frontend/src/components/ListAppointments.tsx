@@ -5,6 +5,7 @@ import React from 'react'
 import api from '../services/api'
 import AppointmentModel from '../utils/AppointmentModel'
 import AppointmentInfo from './AppointmentInfo'
+import AppointmentInfoSecretary from './AppointmentInfoSecretary'
 
 type AppointmentsProps = {
   appointments: AppointmentModel[]
@@ -76,15 +77,11 @@ const ListAppointments = ({ appointments }: AppointmentsProps) => {
       key: 'action',
       render: (text, record) => (
         <Space size="middle">
-          <AppointmentInfo appointment={text} />
-          {/* <Popconfirm
-            title="Tem certeza que deseja excluir？"
-            okText="Sim"
-            cancelText="Não"
-            onConfirm={() => confirmExclusion(text.id)}
-          >
-            <a>Deletar</a>
-          </Popconfirm> */}
+          {router.asPath.startsWith('/u') ? (
+            <AppointmentInfo appointment={text} />
+          ) : (
+            <AppointmentInfoSecretary appointment={text} />
+          )}
         </Space>
       ),
     },

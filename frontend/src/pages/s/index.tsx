@@ -5,7 +5,7 @@ import LayoutMain from '../../components/LayoutMain'
 import ListAppointments from '../../components/ListAppointments'
 import api from '../../services/api'
 
-export default function UserDashboard({ data, errorCode }) {
+export default function HomeSecretária({ data, errorCode }) {
   if (errorCode) {
     return <Error statusCode={errorCode} />
   }
@@ -27,4 +27,4 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 }
 
-UserDashboard.getLayout = (page) => <LayoutMain>{page}</LayoutMain>
+HomeSecretária.getLayout = (page) => <LayoutMain>{page}</LayoutMain>

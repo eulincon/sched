@@ -1,15 +1,27 @@
-import { Button, Col, Divider, message, Modal, Row, Timeline } from 'antd'
+import {
+  Button,
+  Col,
+  DatePicker,
+  Divider,
+  message,
+  Modal,
+  Row,
+  Space,
+  Timeline,
+} from 'antd'
 import moment from 'moment'
 import router from 'next/router'
 import React, { useState } from 'react'
 import api from '../services/api'
 import AppointmentModel from '../utils/AppointmentModel'
 
+const { RangePicker } = DatePicker
+
 type AppointmentInfoProps = {
   appointment: AppointmentModel
 }
 
-const AppointmentInfo = ({ appointment }: AppointmentInfoProps) => {
+const AppointmentInfoSecretary = ({ appointment }: AppointmentInfoProps) => {
   const [visible, setVisible] = useState(false)
   const [state, setState] = useState({
     loading: false,
@@ -47,6 +59,38 @@ const AppointmentInfo = ({ appointment }: AppointmentInfoProps) => {
       })
   }
 
+  function onChange(value, dateString) {
+    console.log('Selected Time: ', value)
+    console.log('Formatted Selected Time: ', dateString)
+  }
+
+  async function onOk(value, id) {
+    console.log('id: ', id)
+    console.log(
+      'Formatted Selected Time onok: ',
+      value.format('YYYY-MM-DD HH:mm')
+    )
+    message.loading({ content: 'Atualizando status...', key: id })
+
+    await api
+      .put(
+        `/appointments/${id}?status=REAGENDANDO&newDate=${value.format(
+          'YYYY-MM-DD HH:mm'
+        )}`
+      )
+      .then(() => {
+        message.success({
+          content: 'Solicitação de reagendameto cadastrada',
+          key: id,
+        })
+        router.replace(router.asPath)
+        setVisible(false)
+      })
+      .catch(() => {
+        message.error({ content: 'Erro no processo', key: id })
+      })
+  }
+
   return (
     <>
       <Button type="primary" onClick={() => setVisible(true)}>
@@ -61,33 +105,67 @@ const AppointmentInfo = ({ appointment }: AppointmentInfoProps) => {
         width={1000}
         footer={[
           appointment.appointmentLog[appointment.appointmentLog.length - 1]
-            .appointmentStatus == 'REAGENDANDO' ? (
-            <span style={{ float: 'left' }} key="reagendando">
+            .appointmentStatus == 'PENDENTE' ? (
+            <span style={{ float: 'left' }} key="pendente">
               <Button
                 type="primary"
+                key="confirmar"
                 loading={state.loading}
-                onClick={() =>
-                  updateStatusAppointment(appointment.id, 'CONFIRMADO')
-                }
+                onClick={() => setVisible(false)}
               >
-                Confirmar novo horário
+                Confirmar
               </Button>
               <Button
                 danger
+                key="recusado"
+                value="RECUSADO"
                 loading={state.loading}
                 onClick={() =>
                   updateStatusAppointment(appointment.id, 'RECUSADO')
                 }
               >
-                Recusar novo horário
+                Recusar
+              </Button>
+              <Divider type="vertical" />
+              <span>Reagendar: </span>
+              <Space direction="vertical" size={12}>
+                <DatePicker
+                  showNow={false}
+                  showTime={{ format: 'HH:mm' }}
+                  onChange={onChange}
+                  onOk={(e) => onOk(e, appointment.id)}
+                  format="YYYY-MM-DD HH:mm"
+                />
+              </Space>
+              {/* <Button
+                key="reagendar"
+                loading={state.loading}
+                onClick={() => setVisible(false)}
+              >
+                Reagendar
+              </Button> */}
+            </span>
+          ) : (
+            ''
+          ),
+          appointment.appointmentLog[appointment.appointmentLog.length - 1]
+            .appointmentStatus == 'REAGENDANDO' ? (
+            <span style={{ float: 'left' }} key="reagendando">
+              <Button
+                danger
+                key="recusado"
+                value="RECUSADO"
+                loading={state.loading}
+                onClick={() =>
+                  updateStatusAppointment(appointment.id, 'RECUSADO')
+                }
+              >
+                Recusar
               </Button>
             </span>
           ) : (
             ''
           ),
-          // <Button key="back" onClick={() => setVisible(false)}>
-          //   Return
-          // </Button>,
           <Button
             key="submit"
             loading={state.loading}
@@ -148,4 +226,4 @@ const AppointmentInfo = ({ appointment }: AppointmentInfoProps) => {
   )
 }
 
-export default AppointmentInfo
+export default AppointmentInfoSecretary

@@ -10,6 +10,7 @@ type AppointmentModel = {
   id: number
   details: string
   time: Date
+  rescheduledDate: Date
   appointmentLog: AppointmentLog[]
   clinic: ClinicModel
 }

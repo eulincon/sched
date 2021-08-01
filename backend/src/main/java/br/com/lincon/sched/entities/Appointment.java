@@ -1,12 +1,12 @@
 package br.com.lincon.sched.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -24,7 +24,9 @@ public class Appointment {
   private Consultorio clinic;
   @ManyToOne
   private Usuario user;
+  @NotNull
   private LocalDateTime time;
+  private LocalDateTime rescheduledDate;
   @OneToMany(mappedBy = "appointment")
   private List<AppointmentLog> appointmentLog;
 }

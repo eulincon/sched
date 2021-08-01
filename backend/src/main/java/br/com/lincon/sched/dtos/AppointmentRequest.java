@@ -16,6 +16,8 @@ public class AppointmentRequest {
   @NotNull
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
   private LocalDateTime time;
+//  @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
+//  private LocalDateTime rescheduledData;
 
   public Appointment toModel(Usuario user, Consultorio clinic) {
     return Appointment.builder().clinic(clinic).user(user).details(this.details).time(this.time).build();

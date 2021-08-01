@@ -7,6 +7,7 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { navItemsAdm } from '../utils/navBarAdm'
 import { navItemsPatient } from '../utils/navBarPatient'
+import { navItemsSecretary } from '../utils/navBarSecretary'
 
 const { Header, Sider, Content } = Layout
 
@@ -42,7 +43,9 @@ const LayoutMain = ({ children }) => {
   const router = useRouter()
   const navItems = router.asPath.startsWith('/u')
     ? navItemsPatient
-    : navItemsAdm
+    : router.asPath.startsWith('/adm')
+    ? navItemsAdm
+    : navItemsSecretary
   // const itemActive = navItems.filter((item) => item.path == router.asPath)[0]
   const [selectedBarValue, setSelectedBarValue] = useState('')
 
@@ -73,7 +76,6 @@ const LayoutMain = ({ children }) => {
           selectedKeys={[selectedBarValue]}
           activeKey={selectedBarValue}
         >
-          {console.log(selectedBarValue)}
           {navItems.map((index, key) => {
             return (
               <Menu.Item key={key} icon={index.icon}>
