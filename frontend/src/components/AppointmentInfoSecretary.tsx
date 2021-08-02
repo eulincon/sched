@@ -7,7 +7,7 @@ import {
   Modal,
   Row,
   Space,
-  Timeline,
+  Timeline
 } from 'antd'
 import moment from 'moment'
 import router from 'next/router'
@@ -111,7 +111,8 @@ const AppointmentInfoSecretary = ({ appointment }: AppointmentInfoProps) => {
                 type="primary"
                 key="confirmar"
                 loading={state.loading}
-                onClick={() => setVisible(false)}
+                onClick={() =>
+                  updateStatusAppointment(appointment.id, 'CONFIRMADO')}
               >
                 Confirmar
               </Button>

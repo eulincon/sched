@@ -8,7 +8,7 @@ import {
   Modal,
   Row,
   Select,
-  Switch,
+  Switch
 } from 'antd'
 import MaskedInput from 'antd-mask-input'
 import { useForm } from 'antd/lib/form/Form'
@@ -41,13 +41,13 @@ const EditSecretariaModal = ({ secretaria }: EditSecretariaModalProps) => {
   }, [])
 
   const showModal = () => {
+    console.log(secretaria)
+    setSecretariaState({...secretariaState, main: form.getFieldValue("main")})
     setIsModalVisible(true)
-    form.resetFields()
   }
 
   const handleOk = () => {
     onFinish(secretariaState)
-    setIsModalVisible(false)
   }
 
   const handleCancel = () => {
@@ -68,6 +68,7 @@ const EditSecretariaModal = ({ secretaria }: EditSecretariaModalProps) => {
           key: secretaria.id,
         })
         router.replace(router.asPath)
+        setIsModalVisible(false)
       })
       .catch((error) => {
         message.error({

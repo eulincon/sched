@@ -1,13 +1,13 @@
 import {
   CalendarOutlined,
   InsertRowRightOutlined,
-  UserOutlined,
+  UserOutlined
 } from '@ant-design/icons'
 
 export const navItemsAdm = [
   {
     title: 'Agenda',
-    path: '/adm/agenda',
+    path: '/adm',
     icon: <CalendarOutlined />,
   },
   {

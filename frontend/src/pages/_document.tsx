@@ -11,7 +11,6 @@ export default class MyDocument extends Document {
             rel="stylesheet"
           />
           <link rel="shortcut icon" href="/calendar.png" type="image/png" />
-          <title>Sched</title>
         </Head>
         <body>
           <Main />
