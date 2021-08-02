@@ -1,3 +1,5 @@
+import { message } from 'antd'
+import { AxiosResponse } from 'axios'
 import { useRouter } from 'next/router'
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import api from '../services/api'
@@ -32,12 +34,9 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     function loadStoragedData() {
-      const storagedUser = localStorage.getItem('@RNAuth:user')
-      const storagedToken = localStorage.getItem('@RNAuth:token')
+      const storagedUser = localStorage.getItem(':user')
 
-      if (storagedUser && storagedToken) {
-        api.defaults.headers['Authorization'] = `Bearer ${storagedToken}`
-
+      if (storagedUser) {
         setUser(JSON.parse(storagedUser))
       }
       setLoading(false)
@@ -49,14 +48,24 @@ export const AuthProvider = ({ children }) => {
   async function signIn(data) {
     const res = await api
       .post('/user/login', data)
-      .then((response) => {
+      .then((response: AxiosResponse<UserModel>) => {
         localStorage.setItem(':user', JSON.stringify(response.data))
         setUser(response.data)
+        message.destroy(data)
+        response.data.type == 'PATIENT'
+          ? route.push('/u')
+          : response.data.type == 'SECRETARY'
+          ? route.push('/s')
+          : route.push('adm')
         return true
       })
-      .catch((error) => {
+      .catch((err) => {
         console.log('Erro ao fazer login')
-        console.log(error)
+        console.log(err)
+        message.error({
+          content: `${err.response.data.titulo}`,
+          key: data,
+        })
         return false
       })
 

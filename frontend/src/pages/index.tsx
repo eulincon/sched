@@ -19,18 +19,18 @@ export default function Home() {
 
   const onFinish = async (values: any) => {
     message.loading({ content: 'Carrengando...', key: values, duration: 0 })
-    const r = await signIn(values)
+    const res = await signIn(values)
     // api
     //   .post('user/login', values)
     //   .then(() => {
     //     route.push('/u', undefined, { shallow: true })
     //     message.destroy(values)
     //   })
-    //   .catch((err: AxiosError) => {
-    //     message.error({
-    //       content: `${err.response.data.titulo}`,
-    //       key: values,
-    //     })
+    // .catch((err: AxiosError) => {
+    // message.error({
+    //   content: `${err.response.data.titulo}`,
+    //   key: values,
+    // })
     //   })
     //   .catch(() => {
     //     message.error({

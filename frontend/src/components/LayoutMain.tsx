@@ -13,6 +13,7 @@ import { useAuth } from '../contexts/auth'
 import { navItemsAdm } from '../utils/navBarAdm'
 import { navItemsPatient } from '../utils/navBarPatient'
 import { navItemsSecretary } from '../utils/navBarSecretary'
+import UserModel from '../utils/UserModel'
 
 const { Header, Sider, Content } = Layout
 
@@ -34,7 +35,7 @@ const StyledLayout = styled(Layout)`
   .logo {
     height: 32px;
     margin: 16px;
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(155, 155, 155, 0.3);
   }
 
   .site-layout .site-layout-background {
@@ -43,7 +44,7 @@ const StyledLayout = styled(Layout)`
 `
 
 const LayoutMain = ({ children }) => {
-  const { signOut } = useAuth()
+  const { signOut, user } = useAuth()
   const [collapsed, setCollapsed] = useState(false)
   const [showChild, setShowChild] = useState(false)
   const router = useRouter()
@@ -74,7 +75,7 @@ const LayoutMain = ({ children }) => {
   return (
     <StyledLayout>
       <Sider trigger={null} collapsible collapsed={collapsed}>
-        <div className="logo" />
+        <div className="logo">Olá {(user as UserModel).name}</div>
         <Menu
           theme="dark"
           mode="inline"
