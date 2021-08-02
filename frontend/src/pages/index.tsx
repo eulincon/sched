@@ -1,10 +1,9 @@
 import { Button, Col, Form, Input, message, Row } from 'antd'
 import Title from 'antd/lib/typography/Title'
-import { AxiosError } from 'axios'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import LayoutHeader from '../components/LayoutHeader'
-import api from '../services/api'
+import { useAuth } from '../contexts/auth'
 
 const layout = {
   labelCol: { span: 12 },
@@ -16,28 +15,30 @@ const tailLayout = {
 
 export default function Home() {
   const route = useRouter()
+  const { signIn } = useAuth()
 
-  const onFinish = (values: any) => {
+  const onFinish = async (values: any) => {
     message.loading({ content: 'Carrengando...', key: values, duration: 0 })
-    api
-      .post('user/login', values)
-      .then(() => {
-        route.push('/u', undefined, { shallow: true })
-        message.destroy(values)
-      })
-      .catch((err: AxiosError) => {
-        message.error({
-          content: `${err.response.data.titulo}`,
-          key: values,
-        })
-      })
-      .catch(() => {
-        message.error({
-          content: `Sem conexão com o servidor`,
-          key: values,
-          duration: 3,
-        })
-      })
+    const r = await signIn(values)
+    // api
+    //   .post('user/login', values)
+    //   .then(() => {
+    //     route.push('/u', undefined, { shallow: true })
+    //     message.destroy(values)
+    //   })
+    //   .catch((err: AxiosError) => {
+    //     message.error({
+    //       content: `${err.response.data.titulo}`,
+    //       key: values,
+    //     })
+    //   })
+    //   .catch(() => {
+    //     message.error({
+    //       content: `Sem conexão com o servidor`,
+    //       key: values,
+    //       duration: 3,
+    //     })
+    //   })
   }
 
   const onFinishFailed = (errorInfo: any) => {
@@ -66,6 +67,10 @@ export default function Home() {
             name="email"
             rules={[
               {
+                type: 'email',
+                message: 'The input is not valid E-mail!',
+              },
+              {
                 required: true,
                 message: 'Por favor, entre com um email!',
               },
@@ -84,7 +89,7 @@ export default function Home() {
               },
             ]}
           >
-            <Input />
+            <Input.Password />
           </Form.Item>
 
           <Form.Item {...tailLayout}>

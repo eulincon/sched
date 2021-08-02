@@ -1,6 +1,7 @@
 import 'antd/dist/antd.css'
 import Error from 'next/error'
 import Head from 'next/head'
+import { AuthProvider } from '../contexts/auth'
 
 export default function MyApp({ Component, pageProps }) {
   if (pageProps.error)
@@ -13,5 +14,16 @@ export default function MyApp({ Component, pageProps }) {
   // Use the layout defined at the page level, if available
   const getLayout = Component.getLayout || ((page) => page)
 
-  return getLayout(<><Head><title>Sched</title></Head><Component {...pageProps} /></>)
+  return (
+    <AuthProvider>
+      {getLayout(
+        <>
+          <Head>
+            <title>Sched</title>
+          </Head>
+          <Component {...pageProps} />
+        </>
+      )}
+    </AuthProvider>
+  )
 }

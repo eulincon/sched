@@ -9,7 +9,11 @@ export default function UserDashboard({ data, errorCode }) {
   if (errorCode) {
     return <Error statusCode={errorCode} />
   }
-  return <ListAppointments appointments={data} />
+  return (
+    <>
+      <ListAppointments appointments={data} />
+    </>
+  )
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {

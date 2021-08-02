@@ -1,10 +1,15 @@
-import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
+import {
+  LogoutOutlined,
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
+} from '@ant-design/icons'
 import { Layout, Menu } from 'antd'
 import 'antd/dist/antd.css'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
+import { useAuth } from '../contexts/auth'
 import { navItemsAdm } from '../utils/navBarAdm'
 import { navItemsPatient } from '../utils/navBarPatient'
 import { navItemsSecretary } from '../utils/navBarSecretary'
@@ -38,6 +43,7 @@ const StyledLayout = styled(Layout)`
 `
 
 const LayoutMain = ({ children }) => {
+  const { signOut } = useAuth()
   const [collapsed, setCollapsed] = useState(false)
   const [showChild, setShowChild] = useState(false)
   const router = useRouter()
@@ -83,6 +89,13 @@ const LayoutMain = ({ children }) => {
               </Menu.Item>
             )
           })}
+          <Menu.Item
+            onClick={() => signOut()}
+            key={'sair'}
+            icon={<LogoutOutlined />}
+          >
+            <span>Sair</span>
+          </Menu.Item>
         </Menu>
       </Sider>
       <Layout className="site-layout">
