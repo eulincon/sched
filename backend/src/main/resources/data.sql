@@ -1,10 +1,12 @@
 INSERT INTO consultorio(name, address, is_active) VALUES ('Consultório A', 'Rua Fulano de Tal', true);
 INSERT INTO consultorio(name, address, is_active) VALUES ('Consultório B', 'Rua ABC', true);
 
-INSERT INTO secretaria(name, cpf, address, is_main, clinic_id) VALUES ('Ana', '072.087.550-19', 'Rua X', true, 1);
-INSERT INTO secretaria(name, cpf, address, is_main, clinic_id) VALUES ('Maria', '556.745.840-10', 'Rua Y', false, 2);
+INSERT INTO usuario(cpf, email, name, password, type) VALUES ('04309089380', 'u@a.com', 'Lincon', '$2a$10$pXPrMAlBwA/Y8q496HP6d.S2FkYTuafMjEn8ffw6zSkmFlyBp5VG6', 'PATIENT');
+INSERT INTO usuario(cpf, email, name, password, type) VALUES ('04309089380', 's1@a.com', 'Luiza', '$2a$10$pXPrMAlBwA/Y8q496HP6d.S2FkYTuafMjEn8ffw6zSkmFlyBp5VG6', 'SECRETARY');
+INSERT INTO usuario(cpf, email, name, password, type) VALUES ('04309089380', 's2@a.com', 'Milena', '$2a$10$pXPrMAlBwA/Y8q496HP6d.S2FkYTuafMjEn8ffw6zSkmFlyBp5VG6', 'SECRETARY');
 
-INSERT INTO usuario(cpf, email, name, password, type) VALUES ('04309089380', 'a@a.com', 'Lincon', '$2a$10$pXPrMAlBwA/Y8q496HP6d.S2FkYTuafMjEn8ffw6zSkmFlyBp5VG6', 'PATIENT');
+INSERT INTO secretaria(address, is_main, clinic_id, user_id) VALUES ('Rua X', true, 1, 2);
+INSERT INTO secretaria(address, is_main, clinic_id, user_id) VALUES ('Rua Y', false, 2, 3);
 
 INSERT INTO appointment(time, clinic_id, user_id) VALUES ({ts '2021-04-03 13:00'}, 1, 1);
 INSERT INTO appointment(time, clinic_id, user_id) VALUES ({ts '2021-04-03 13:00'}, 1, 1);
