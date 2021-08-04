@@ -143,6 +143,26 @@ const FormSecretaria = () => {
             </Col>
           </Row>
           <Row gutter={16}>
+            <Col span={24}>
+              <Form.Item
+                name="email"
+                label="Email"
+                rules={[
+                  {
+                    type: 'email',
+                    message: 'The input is not valid E-mail!',
+                  },
+                  {
+                    required: true,
+                    message: 'Por favor, entre com um email!',
+                  },
+                ]}
+              >
+                <Input placeholder="Digite seu endereço" />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={16}>
             <Col span={12}>
               <Form.Item
                 name="clinicId"

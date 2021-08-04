@@ -1,161 +1,82 @@
-import { SearchOutlined } from '@ant-design/icons'
-import { Button, Input, Space, Table } from 'antd'
-import { useState } from 'react'
-import Highlighter from 'react-highlight-words'
+import { Badge, Calendar } from 'antd'
+import AppointmentModel from '../utils/AppointmentModel'
 
-const data = [
-  {
-    key: '1',
-    name: 'John Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park',
-  },
-  {
-    key: '2',
-    name: 'Joe Black',
-    age: 42,
-    address: 'London No. 1 Lake Park',
-  },
-  {
-    key: '3',
-    name: 'Jim Green',
-    age: 32,
-    address: 'Sidney No. 1 Lake Park',
-  },
-  {
-    key: '4',
-    name: 'Jim Red',
-    age: 32,
-    address: 'London No. 2 Lake Park',
-  },
-]
+type ListAppointmentsConfirmedProps = {
+  appointments: AppointmentModel[]
+}
 
-const ListAppointmentsConfirmed = () => {
-  const [state, setState] = useState({
-    searchText: '',
-    searchedColumn: '',
-  })
-  let searchInput: Input
+const ListAppointmentsConfirmed = ({
+  appointments,
+}: ListAppointmentsConfirmedProps) => {
+  function getListData(value) {
+    let listData
+    switch (value.format('DD-MM-yyyy')) {
+      case '08-08-2021':
+        listData = [
+          { type: 'success', content: '20:21 - Maria da Consolação' },
+          { type: 'success', content: 'This is usual event.' },
+        ]
+        break
+      case '09-08-2021':
+        listData = [
+          { type: 'warning', content: 'This is warning event.' },
+          { type: 'success', content: 'This is usual event.' },
+          { type: 'error', content: 'This is error event.' },
+        ]
+        break
+      case '10-09-2021':
+        listData = [
+          { type: 'warning', content: 'This is warning event' },
+          { type: 'success', content: 'This is very long usual event。。....' },
+          { type: 'error', content: 'This is error event 1.' },
+          { type: 'error', content: 'This is error event 2.' },
+          { type: 'error', content: 'This is error event 3.' },
+          { type: 'error', content: 'This is error event 4.' },
+        ]
+        break
+      default:
+    }
+    return listData || []
+  }
 
-  const getColumnSearchProps = (dataIndex) => ({
-    filterDropdown: ({
-      setSelectedKeys,
-      selectedKeys,
-      confirm,
-      clearFilters,
-    }) => (
-      <div style={{ padding: 8 }}>
-        <Input
-          ref={(node) => {
-            searchInput = node
-          }}
-          placeholder={`Search ${dataIndex}`}
-          value={selectedKeys[0]}
-          onChange={(e) =>
-            setSelectedKeys(e.target.value ? [e.target.value] : [])
-          }
-          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
-          style={{ marginBottom: 8, display: 'block' }}
-        />
-        <Space>
-          <Button
-            type="primary"
-            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
-            icon={<SearchOutlined />}
-            size="small"
-            style={{ width: 90 }}
-          >
-            Search
-          </Button>
-          <Button
-            onClick={() => handleReset(clearFilters)}
-            size="small"
-            style={{ width: 90 }}
-          >
-            Reset
-          </Button>
-          <Button
-            type="link"
-            size="small"
-            onClick={() => {
-              confirm({ closeDropdown: false })
-              setState({
-                searchText: selectedKeys[0],
-                searchedColumn: dataIndex,
-              })
-            }}
-          >
-            Filter
-          </Button>
-        </Space>
+  function dateCellRender(value) {
+    const listData = getListData(value)
+
+    return (
+      <ul className="events">
+        {listData.map((item) => (
+          <li key={item.content} style={{ listStyleType: 'none' }}>
+            <Badge status={item.type} text={item.content} />
+          </li>
+        ))}
+      </ul>
+    )
+  }
+
+  function getMonthData(value) {
+    if (value.month() === 8) {
+      return 1394
+    }
+  }
+
+  function monthCellRender(value) {
+    const num = getMonthData(value)
+    return num ? (
+      <div className="notes-month">
+        <section>{num}</section>
+        <span>Backlog number</span>
       </div>
-    ),
-    filterIcon: (filtered) => (
-      <SearchOutlined style={{ color: filtered ? '#1890ff' : undefined }} />
-    ),
-    onFilter: (value, record) =>
-      record[dataIndex]
-        ? record[dataIndex]
-            .toString()
-            .toLowerCase()
-            .includes(value.toLowerCase())
-        : '',
-    onFilterDropdownVisibleChange: (visible) => {
-      if (visible) {
-        setTimeout(() => searchInput.select(), 100)
-      }
-    },
-    render: (text) =>
-      state.searchedColumn === dataIndex ? (
-        <Highlighter
-          highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
-          searchWords={[state.searchText]}
-          autoEscape
-          textToHighlight={text ? text.toString() : ''}
-        />
-      ) : (
-        text
-      ),
-  })
-
-  const handleSearch = (selectedKeys, confirm, dataIndex) => {
-    confirm()
-    setState({
-      searchText: selectedKeys[0],
-      searchedColumn: dataIndex,
-    })
+    ) : null
   }
 
-  const handleReset = (clearFilters) => {
-    clearFilters()
-    setState({ ...state, searchText: '' })
-  }
+  console.log(appointments)
 
-  const columns = [
-    {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
-      width: '30%',
-      ...getColumnSearchProps('name'),
-    },
-    {
-      title: 'Age',
-      dataIndex: 'age',
-      key: 'age',
-      width: '20%',
-      ...getColumnSearchProps('age'),
-    },
-    {
-      title: 'Address',
-      dataIndex: 'address',
-      key: 'address',
-      ...getColumnSearchProps('address'),
-      sorter: (a, b) => a.address.length - b.address.length,
-      sortDirections: ['descend', 'ascend'],
-    },
-  ]
-  return <Table columns={columns as any} dataSource={data} />
+  return (
+    <Calendar
+      dateCellRender={dateCellRender}
+      monthCellRender={monthCellRender}
+    />
+  )
 }
 
 export default ListAppointmentsConfirmed

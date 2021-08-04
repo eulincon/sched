@@ -8,6 +8,7 @@ import br.com.lincon.sched.repositories.AppointmentLogRepository;
 import br.com.lincon.sched.repositories.AppointmentRepository;
 import br.com.lincon.sched.repositories.ConsultorioRepository;
 import br.com.lincon.sched.repositories.UsuarioRepository;
+import jdk.jshell.Snippet;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequestMapping("/appointments")
@@ -53,13 +55,10 @@ public class AppointmentController {
     return ResponseEntity.ok().build();
   }
 
-//  @PostMapping
-//  public ResponseEntity<Appointment> create(@Valid @RequestBody AppointmentRequest appointmentRequest) {
-//
-//    Appointment appointment = appointmentRequest.toModel(appointmentRepository, consultorioRepository, usuarioRepository);
-//
-//    appointmentRepository.save(appointment);
-//
-//    return ResponseEntity.ok(appointment);
-//  }
+  @GetMapping
+  public ResponseEntity<List<Appointment>> findAllAppointmentByStatus(@RequestParam AppointmentStatus status) {
+    List<Appointment> appointmentsConfirmados = appointmentRepository.findByAppointmentLogAppointmentStatus(status);
+
+    return ResponseEntity.ok(appointmentsConfirmados);
+  }
 }

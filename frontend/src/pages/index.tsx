@@ -1,7 +1,6 @@
 import { Button, Col, Form, Input, message, Row } from 'antd'
 import Title from 'antd/lib/typography/Title'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import LayoutHeader from '../components/LayoutHeader'
 import { useAuth } from '../contexts/auth'
 
@@ -14,9 +13,7 @@ const tailLayout = {
 }
 
 export default function Home() {
-  const route = useRouter()
   const { signIn } = useAuth()
-
   const onFinish = async (values: any) => {
     message.loading({ content: 'Carrengando...', key: values, duration: 0 })
     const res = await signIn(values)

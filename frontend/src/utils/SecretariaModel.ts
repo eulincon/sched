@@ -1,7 +1,9 @@
+import UserModel from './UserModel'
+
 type SecretariaModel = {
   id: number
-  name: string
-  cpf: string
+  user: UserModel
+  email: string
   address: string
   main: boolean
   clinicId: number

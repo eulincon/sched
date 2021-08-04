@@ -8,11 +8,11 @@ INSERT INTO usuario(cpf, email, name, password, type) VALUES ('04309089380', 's2
 INSERT INTO secretaria(address, is_main, clinic_id, user_id) VALUES ('Rua X', true, 1, 2);
 INSERT INTO secretaria(address, is_main, clinic_id, user_id) VALUES ('Rua Y', false, 2, 3);
 
-INSERT INTO appointment(time, clinic_id, user_id) VALUES ({ts '2021-04-03 13:00'}, 1, 1);
-INSERT INTO appointment(time, clinic_id, user_id) VALUES ({ts '2021-04-03 13:00'}, 1, 1);
-INSERT INTO appointment(time, clinic_id, user_id) VALUES ({ts '2021-04-03 13:00'}, 1, 1);
-INSERT INTO appointment(time, rescheduled_date, clinic_id, user_id) VALUES ({ts '2021-04-03 13:00'}, {ts '2021-04-07 17:00'}, 1, 1);
-INSERT INTO appointment(time, clinic_id, user_id) VALUES ({ts '2021-04-03 13:00'}, 1, 1);
+INSERT INTO appointment(time, clinic_id, user_id) VALUES ({ts '2021-08-07 13:00'}, 1, 1);
+INSERT INTO appointment(time, clinic_id, user_id) VALUES ({ts '2021-08-07 13:00'}, 1, 1);
+INSERT INTO appointment(time, clinic_id, user_id) VALUES ({ts '2021-08-03 13:00'}, 1, 1);
+INSERT INTO appointment(time, rescheduled_date, clinic_id, user_id) VALUES ({ts '2021-08-03 13:00'}, {ts '2021-08-07 17:00'}, 1, 1);
+INSERT INTO appointment(time, clinic_id, user_id) VALUES ({ts '2021-08-03 13:00'}, 1, 1);
 
 
 INSERT INTO appointment_log(appointment_status, timestamp, appointment_id) VALUES ('PENDENTE', current_time(), 1);

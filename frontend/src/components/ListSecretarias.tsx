@@ -15,14 +15,15 @@ const ListSecretarias = ({ secretarias }: SecretariaProps) => {
   const columns = [
     {
       title: 'Nome',
-      dataIndex: 'name',
+      dataIndex: 'user',
       key: 'name',
-      render: (text) => <a>{text}</a>,
+      render: (text) => <span>{text.name}</span>,
     },
     {
       title: 'CPF',
-      dataIndex: 'cpf',
+      dataIndex: 'user',
       key: 'cpf',
+      render: (user) => <span>{user.cpf}</span>,
     },
     {
       title: 'Endereço',
@@ -117,6 +118,8 @@ const ListSecretarias = ({ secretarias }: SecretariaProps) => {
     key: secretaria.id,
     tags: secretaria.main ? ['main'] : [],
   }))
+
+  console.log(secretarias)
 
   return (
     <div>

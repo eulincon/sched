@@ -8,7 +8,7 @@ import UserModel from '../utils/UserModel'
 type AuthContextType = {
   loading: boolean
   signed: boolean
-  user: Object | null
+  user: UserModel
   signIn: Function
   signOut: Function
   validate: Function
@@ -17,7 +17,12 @@ type AuthContextType = {
 const AuthContextData = {
   loading: Boolean(),
   signed: Boolean(),
-  user: Object || null,
+  user: {
+    id: Number(),
+    name: String(),
+    email: String(),
+    type: String(),
+  },
   signIn: Function,
   signOut: Function,
   validate: Function,
@@ -37,7 +42,13 @@ export const AuthProvider = ({ children }) => {
       const storagedUser = localStorage.getItem(':user')
 
       if (storagedUser) {
-        setUser(JSON.parse(storagedUser))
+        const usr = JSON.parse(storagedUser)
+        setUser(usr)
+        // usr.type == 'PATIENT'
+        //   ? route.push('/u')
+        //   : usr.type == 'SECRETARY'
+        //   ? route.push('/s')
+        //   : route.push('adm')
       }
       setLoading(false)
     }
@@ -90,7 +101,6 @@ export const AuthProvider = ({ children }) => {
   function signOut() {
     localStorage.clear()
     setUser(null)
-    route.push('/')
   }
 
   return (

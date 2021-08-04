@@ -2,6 +2,7 @@ import {
   LogoutOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
+  UserOutlined,
 } from '@ant-design/icons'
 import { Layout, Menu } from 'antd'
 import 'antd/dist/antd.css'
@@ -33,9 +34,8 @@ const StyledLayout = styled(Layout)`
   }
 
   .logo {
-    height: 32px;
+    /* height: 32px; */
     margin: 16px;
-    background: rgba(155, 155, 155, 0.3);
   }
 
   .site-layout .site-layout-background {
@@ -44,7 +44,7 @@ const StyledLayout = styled(Layout)`
 `
 
 const LayoutMain = ({ children }) => {
-  const { signOut, user } = useAuth()
+  const { signOut, user, signed, loading } = useAuth()
   const [collapsed, setCollapsed] = useState(false)
   const [showChild, setShowChild] = useState(false)
   const router = useRouter()
@@ -72,10 +72,34 @@ const LayoutMain = ({ children }) => {
     setCollapsed(!collapsed)
   }
 
+  // if (loading) {
+  //   return <div>Loading...</div>
+  // }
+
+  // if (!signed) {
+  //   router.push('/')
+  // }
+
   return (
     <StyledLayout>
       <Sider trigger={null} collapsible collapsed={collapsed}>
-        <div className="logo">Olá {(user as UserModel).name}</div>
+        {collapsed ? (
+          <div className="logo">
+            <UserOutlined
+              style={{
+                color: 'white',
+                marginLeft: '1rem',
+              }}
+            />
+          </div>
+        ) : (
+          <div
+            style={{ color: 'white', marginLeft: '1.5rem' }}
+            className="logo"
+          >
+            Olá {(user as UserModel)?.name}
+          </div>
+        )}
         <Menu
           theme="dark"
           mode="inline"
