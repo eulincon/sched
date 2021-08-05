@@ -21,6 +21,7 @@ const AuthContextData = {
     id: Number(),
     name: String(),
     email: String(),
+    cpf: String(),
     type: String(),
   },
   signIn: Function,
@@ -62,11 +63,11 @@ export const AuthProvider = ({ children }) => {
       .then((response: AxiosResponse<UserModel>) => {
         localStorage.setItem(':user', JSON.stringify(response.data))
         setUser(response.data)
-        message.destroy(data)
+        message.destroy(data.email)
         response.data.type == 'PATIENT'
-          ? route.push('/u')
+          ? route.push(`/u?id=${response.data.id}`)
           : response.data.type == 'SECRETARY'
-          ? route.push('/s')
+          ? route.push(`/s?id=${response.data.id}`)
           : route.push('adm')
         return true
       })
@@ -75,7 +76,7 @@ export const AuthProvider = ({ children }) => {
         console.log(err)
         message.error({
           content: `${err.response.data.titulo}`,
-          key: data,
+          key: data.email,
         })
         return false
       })

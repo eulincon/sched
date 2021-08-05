@@ -58,6 +58,7 @@ const LayoutMain = ({ children }) => {
 
   // Wait until after client-side hydration to show
   useEffect(() => {
+    // if (!signed) router.push('/')
     const itemActive = navItems.filter((item) => item.path == router.asPath)[0]
     setSelectedBarValue(navItems.indexOf(itemActive).toString())
     setShowChild(true)
@@ -76,9 +77,9 @@ const LayoutMain = ({ children }) => {
   //   return <div>Loading...</div>
   // }
 
-  // if (!signed) {
-  //   router.push('/')
-  // }
+  if (!signed) {
+    router.push('/')
+  }
 
   return (
     <StyledLayout>
@@ -110,7 +111,7 @@ const LayoutMain = ({ children }) => {
           {navItems.map((index, key) => {
             return (
               <Menu.Item key={key} icon={index.icon}>
-                <Link href={index.path}>{index.title}</Link>
+                <Link href={index.path + `?id=${user?.id}`}>{index.title}</Link>
               </Menu.Item>
             )
           })}

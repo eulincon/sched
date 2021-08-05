@@ -30,11 +30,11 @@ export default function AgendarConsulta() {
   const [date, setDate] = useState(moment)
 
   const getClinics = async () => {
-    // const { data } = await api.get('/consultorios')
-    const data = [
-      { id: 1, name: 'Consultório A', address: 'Rua X', active: true, key: 1 },
-      { id: 2, name: 'Consultório B', address: 'Rua Z', active: true, key: 2 },
-    ]
+    const { data } = await api.get('/consultorios')
+    // const data = [
+    //   { id: 1, name: 'Consultório A', address: 'Rua X', active: true, key: 1 },
+    //   { id: 2, name: 'Consultório B', address: 'Rua Z', active: true, key: 2 },
+    // ]
     setClinics(data)
   }
 
@@ -60,7 +60,7 @@ export default function AgendarConsulta() {
     values.time = time
     console.log(values)
     await api
-      .post(`/user/${1}/appointments`, values)
+      .post(`/user/${route.query.id}/appointments`, values)
       .then(() => {
         message.success({
           content: 'Solicitação de agendamento confirmado',
@@ -198,8 +198,16 @@ export default function AgendarConsulta() {
           >
             <Select placeholder="Selecione um horário">
               <Option value="08:00">08:00</Option>
+              <Option value="09:00">09:00</Option>
+              <Option value="10:00">10:00</Option>
+              <Option value="11:00">11:00</Option>
+              <Option value="12:00">12:00</Option>
               <Option value="13:00">13:00</Option>
+              <Option value="14:00">14:00</Option>
+              <Option value="15:00">15:00</Option>
               <Option value="16:00">16:00</Option>
+              <Option value="17:00">17:00</Option>
+              <Option value="18:00">18:00</Option>
             </Select>
           </Form.Item>
           <Form.Item name="details" label="Detalhes">

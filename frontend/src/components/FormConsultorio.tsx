@@ -29,7 +29,7 @@ const FormConsultorio = () => {
       .then(() => {
         onClose()
         message.success({
-          content: 'Consoltório cadastrado com sucesso',
+          content: 'Consultório cadastrado com sucesso',
           key: values,
         })
         form.resetFields()

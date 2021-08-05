@@ -1,3 +1,4 @@
+import { CalendarOutlined } from '@ant-design/icons'
 import { Menu } from 'antd'
 import { Header } from 'antd/lib/layout/layout'
 import React, { useEffect, useState } from 'react'
@@ -17,7 +18,18 @@ function HeaderPage() {
 
   return (
     <Header className="header">
-      <div className="logo" />
+      <CalendarOutlined
+        style={{ fontSize: '2rem', marginTop: '1rem', color: 'white' }}
+      />
+      <strong
+        style={{
+          color: 'white',
+          fontWeight: 'bold',
+          fontSize: '1.5rem',
+        }}
+      >
+        Sched
+      </strong>
       <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
         {/* <Menu.Item key="1">nav 1</Menu.Item>
         <Menu.Item key="2">nav 2</Menu.Item>

@@ -1,6 +1,7 @@
 import { Button, Col, Form, Input, message, Row } from 'antd'
 import Title from 'antd/lib/typography/Title'
 import Link from 'next/link'
+import { useState } from 'react'
 import LayoutHeader from '../components/LayoutHeader'
 import { useAuth } from '../contexts/auth'
 
@@ -14,9 +15,17 @@ const tailLayout = {
 
 export default function Home() {
   const { signIn } = useAuth()
+  const [loadingLogin, setLoadingLogin] = useState(false)
+  const [loadingCriarConta, setLoadingCriarConta] = useState(false)
   const onFinish = async (values: any) => {
-    message.loading({ content: 'Carrengando...', key: values, duration: 0 })
+    message.loading({
+      content: 'Carrengando...',
+      key: values.email,
+      duration: 0,
+    })
+    setLoadingLogin(true)
     const res = await signIn(values)
+    if (!res) setLoadingLogin(false)
     // api
     //   .post('user/login', values)
     //   .then(() => {
@@ -90,10 +99,15 @@ export default function Home() {
           </Form.Item>
 
           <Form.Item {...tailLayout}>
-            <Button type="primary" htmlType="submit">
+            <Button loading={loadingLogin} type="primary" htmlType="submit">
               Login
             </Button>
-            <Button type="primary" style={{ float: 'right' }}>
+            <Button
+              type="primary"
+              style={{ float: 'right' }}
+              onClick={() => setLoadingCriarConta(true)}
+              loading={loadingCriarConta}
+            >
               <Link href="/criar_conta">Criar conta</Link>
             </Button>
           </Form.Item>

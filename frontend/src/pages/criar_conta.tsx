@@ -119,7 +119,7 @@ export default function CriarConta() {
 
       <Form.Item
         name="password"
-        label="Password"
+        label="Senha"
         rules={[
           {
             required: true,
@@ -133,7 +133,7 @@ export default function CriarConta() {
 
       <Form.Item
         name="confirm"
-        label="Confirm Password"
+        label="Confirmar senha"
         dependencies={['password']}
         hasFeedback
         rules={[

@@ -16,9 +16,11 @@ export default function UserDashboard({ data, errorCode }) {
   )
 }
 
+UserDashboard.getLayout = (page) => <LayoutMain>{page}</LayoutMain>
+
 export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
-    const res = await api.get(`user/${1}/appointments`)
+    const res = await api.get(`user/${context.query.id}/appointments`)
     var errorCode = res.status.valueOf() == 200 ? 'false' : res.status.valueOf()
     return {
       props: { data: res.data }, // will be passed to the page component as props
@@ -30,5 +32,3 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
   }
 }
-
-UserDashboard.getLayout = (page) => <LayoutMain>{page}</LayoutMain>

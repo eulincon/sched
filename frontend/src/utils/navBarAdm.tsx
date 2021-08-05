@@ -1,13 +1,19 @@
 import {
   CalendarOutlined,
+  CheckOutlined,
   InsertRowRightOutlined,
-  UserOutlined
+  UserOutlined,
 } from '@ant-design/icons'
 
 export const navItemsAdm = [
   {
     title: 'Agenda',
     path: '/adm',
+    icon: <CheckOutlined />,
+  },
+  {
+    title: 'Todas as consultas',
+    path: '/adm/todasconsultas',
     icon: <CalendarOutlined />,
   },
   {

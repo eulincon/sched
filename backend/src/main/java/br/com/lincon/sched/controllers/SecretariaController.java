@@ -2,6 +2,7 @@ package br.com.lincon.sched.controllers;
 
 import br.com.lincon.sched.dtos.SecretariaRequest;
 import br.com.lincon.sched.dtos.SecretariaResponse;
+import br.com.lincon.sched.dtos.SecretariaResponseListAdm;
 import br.com.lincon.sched.entities.Consultorio;
 import br.com.lincon.sched.entities.Secretaria;
 import br.com.lincon.sched.entities.UserType;
@@ -37,10 +38,19 @@ public class SecretariaController {
   ModelMapper modelMapper = new ModelMapper();
 
   @GetMapping
-  public ResponseEntity<List<SecretariaResponse>> findAll() {
+  public ResponseEntity<List<SecretariaResponseListAdm>> findAll() {
     List<Secretaria> all = secretariaRepository.findAll();
-    List<SecretariaResponse> secretariasResponse = all.stream().map(secretaria -> modelMapper.map(secretaria, SecretariaResponse.class)).collect(Collectors.toList());
+    List<SecretariaResponseListAdm> secretariasResponse = all.stream().map(secretaria -> modelMapper.map(secretaria, SecretariaResponseListAdm.class)).collect(Collectors.toList());
     return ResponseEntity.ok(secretariasResponse);
+  }
+
+  @GetMapping("/user/{id}")
+  public ResponseEntity<SecretariaResponse> findSecretaryByUserId(@PathVariable Long id) {
+    Secretaria secretaria = secretariaRepository.findByUserId(id).orElseThrow(() -> new NegocioException("Secretária não encontrada", HttpStatus.UNPROCESSABLE_ENTITY));
+
+    SecretariaResponse secretariaResponse = secretaria.toDto();
+
+    return ResponseEntity.ok(secretariaResponse);
   }
 
   @PostMapping
